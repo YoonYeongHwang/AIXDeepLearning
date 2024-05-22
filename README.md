@@ -30,7 +30,7 @@
     ```
 
 ### Dataset 전처리
-1. 필요한 라이브러리 가져오기 및 GPU/CPU 디바이스 설:
+1. 필요한 라이브러리 가져오기 및 GPU/CPU 디바이스 설정:
     ``` python
     import numpy as np
     import pandas as pd
@@ -46,16 +46,20 @@
     print(device)
     print(torch.cuda.get_device_name(0))
     ```
-  2. 혼잡도 및 승하차 인원 데이터 로드하기
-  * 2022년 지하철 혼잡도와 승하차 인원 데이터를 csv파일에서 가져온다.
+<br>
+  
+2. 혼잡도 및 승하차 인원 데이터 로드하기
+* 2022년 지하철 혼잡도와 승하차 인원 데이터를 csv파일에서 가져온다.
     ``` python
     congestion = pd.read_csv("서울교통공사_지하철혼잡도정보_20221231.csv", encoding='cp949')
     station = pd.read_csv("서울교통공사_역별 일별 시간대별 승하차인원 정보_20221231.csv", encoding='cp949')
     ```
-  * 데이터 타입을 확인한다.
+* 데이터 타입을 확인한다.
     ``` python
     print(station.dtypes)
     ```
+<br>
+
 3. 역명 정리하기
 * 병기역명/부역명을 제거하고, 4호선 이수역과 7호선 총신대입구역은 사실상 같은 역이기 때문에, 명칭을 '총신대입구'로 통일한다.
   ``` python
@@ -63,11 +67,15 @@
   station['역명'] = station['역명'].apply(lambda x: re.sub(r'\(.*\)', '', x).strip())
   station['역명'] = station['역명'].replace('이수', '총신대입구')
   ```
+<br>
+
 4. 환승 인원 데이터 로드
 * 2022년 지하철 역별 요일별 환승인원 데이터를 csv파일에서 가져온다.
   ``` python
   transfer = pd.read_csv("서울교통공사_역별요일별환승인원_20221231.csv", encoding='cp949')
   ```
+<br>
+  
 5. 날짜 형식 변환 및 요일 정보 추가하기
 * '수송일자' column을 날짜 형식으로 변환하고, 요일 정보를 추가한다.
   ``` python
@@ -75,6 +83,8 @@
   station['day_of_week'] = station['수송일자'].dt.dayofweek
   station['day_type'] = station['day_of_week'].apply(lambda x: 'Weekday' if x < 5 else ('Saturday' if x == 5 else 'Sunday'))
   ```
+<br>
+
 6. Dataframe 재구성하기
 * 'station' dataframe을 melt하여 시간대별 승하차 인원을 세분화하고, 그룹화하여 평균을 계산한다.
   ``` python
@@ -92,6 +102,8 @@
   pivot_df.columns = [col.rstrip('_') for col in pivot_df.columns]
   pivot_df.to_csv('processed_passenger_data.csv', index=False, encoding='cp949')
   ```
+<br>
+  
 7. 통합 데이터 로드 및 처리하기
 * 가공된 승하차 인원 데이터를 로드하고, 환승 인원 데이터를 통합한다.
   ``` python
@@ -104,6 +116,8 @@
   station_transfer = station_transfer.sort_values('역번호')
   station_transfer.to_csv('join.csv', index=False, encoding='cp949')
   ```
+<br>
+
 8. 환승 인원 데이터 스케일링하기
 * 각 역의 환승 인원을 승하차 인원 비율에 맞춰 조정한다.
   ``` python
@@ -124,6 +138,8 @@
           new.at[idx, '환승_Sunday'] = row['환승_Sunday'] * scaling_Sunday
           new.at[idx, '환승_Weekday'] = row['환승_Weekday'] * scaling_Weekday
   ```
+<br>
+
 9. 처리된 데이터를 새로운 CSV파일로 저장하기
   ``` python
   print(new.head)
