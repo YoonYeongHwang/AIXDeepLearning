@@ -21,26 +21,114 @@
 이 프로젝트는 2022년 서울 지하철의 다양한 데이터를 분석하고 시각화하여, 시간대별, 요일별로 승하차 인원 및 환승 인원의 패턴을 파악한다. 이러한 데이터를 학습시킨 것을 바탕으로 지하철 혼잡도를 예측하는 것을 목적으로 한다. 이를 통해 지하철 이용에 편의를 제공하며, 교통 혼잡 문제 해결을 위한, 지하철 운영 효율성을 높이기 위한 인사이트를 제공한다.
 
 ## II. Datasets
-### Dataset Details
-'''
-1. 역별 승하차 데이터: 보정 필요
-여러 노선이 한 노선의 승하차량으로 모두 집계되는 경우
-충무로역: 3호선 승하차량이 모두 4호선으로 집계
-연신내역: 6호선 승하차량이 모두 3호선으로 집계
-그 외 창동역, 까치산역, 신내역 등…
+### Datasets
+데이터셋 링크
+```
+서울교통공사 역별 일별 시간대별 승하차인원 정보 : http://data.seoul.go.kr/dataList/OA-12921/F/1/datasetView.do
+서울교통공사 환승역 환승인원정보 : http://data.seoul.go.kr/dataList/OA-12033/S/1/datasetView.do
+서울교통공사 지하철혼잡도정보 : http://data.seoul.go.kr/dataList/OA-12928/F/1/datasetView.do
+```
 
-게이트 위치에 따른 승하차량 차이(bias): 보정 필요
-동대문역사문화공원역: 5호선 게이트 위치가 안 좋아서 5호선 승하차량이 엄청 낮게 나옴(5호선 전체 역 중 꼴찌)
-고속터미널역: 3호선 게이트 위치가 좋아서 3호선 승하차량이 7,9호선 승하차량보다 유리하게 집계되는 측면이 있음
-
-2. 환승객 데이터
-시간별 데이터가 아니고 일평균 환승객 수
-3개 이상 노선 환승역(ex. 왕십리, 공덕, 서울역...)의 경우 노선별 환승객을 알 수 없음
-일단 시간대별 승하차 비율로 고르게 분배하였음.
-
-3. 서울교통공사 1~8호선 데이터만 존재
-'''
 ### Dataset 전처리
+1. 필요한 라이브러리 가져오기 및 GPU/CPU 디바이스 설:
+```
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import torch
+
+if torch.cuda.is_available():
+    device = "cuda"
+elif torch.backends.mps.is_available():
+    device = "mps"
+else:
+    device = "cpu"
+print(device)
+print(torch.cuda.get_device_name(0))
+```
+2. 혼잡도 및 승하차 인원 데이터 로드하기
+2022년 지하철 혼잡도와 승하차 인원 데이터를 csv파일에서 가져온다.
+```
+congestion = pd.read_csv("서울교통공사_지하철혼잡도정보_20221231.csv", encoding='cp949')
+station = pd.read_csv("서울교통공사_역별 일별 시간대별 승하차인원 정보_20221231.csv", encoding='cp949')
+```
+데이터 타입을 확인한다.
+```
+print(station.dtypes)
+```
+3. 역명 정리하기
+병기역명/부역명을 제거하고, 4호선 이수역과 7호선 총신대입구역은 사실상 같은 역이기 때문에, 명칭을 '총신대입구'로 통일한다.
+```
+import re
+station['역명'] = station['역명'].apply(lambda x: re.sub(r'\(.*\)', '', x).strip())
+station['역명'] = station['역명'].replace('이수', '총신대입구')
+```
+4. 환승 인원 데이터 로드
+2022년 지하철 역별 요일별 환승인원 데이터를 csv파일에서 가져온다.
+```
+transfer = pd.read_csv("서울교통공사_역별요일별환승인원_20221231.csv", encoding='cp949')
+```
+5. 날짜 형식 변환 및 요일 정보 추가하기
+'수송일자' column을 날짜 형식으로 변환하고, 요일 정보를 추가한다.
+```
+station['수송일자'] = pd.to_datetime(station['수송일자'])
+station['day_of_week'] = station['수송일자'].dt.dayofweek
+station['day_type'] = station['day_of_week'].apply(lambda x: 'Weekday' if x < 5 else ('Saturday' if x == 5 else 'Sunday'))
+```
+6. Dataframe 재구성하기
+'station' dataframe을 melt하여 시간대별 승하차 인원을 세분화하고, 그룹화하여 평균을 계산한다.
+```
+melted_df = pd.melt(station, id_vars=['호선', '역번호', '역명', '승하차구분', 'day_type'], 
+                    value_vars=['06시이전', '06-07시간대', '07-08시간대', '08-09시간대', '09-10시간대', '10-11시간대', 
+                                '11-12시간대', '12-13시간대', '13-14시간대', '14-15시간대', '15-16시간대', '16-17시간대', 
+                                '17-18시간대', '18-19시간대', '19-20시간대', '20-21시간대', '21-22시간대', '22-23시간대',
+                                '23-24시간대', '24시이후'],
+                    var_name='hour', value_name='passenger_count')
+
+grouped_df = melted_df.groupby(['호선', '역번호', '역명', '승하차구분', 'hour', 'day_type'])['passenger_count'].mean().reset_index()
+pivot_df = grouped_df.pivot_table(index=['호선', '역번호', '역명', 'hour'], columns=['승하차구분', 'day_type'], values='passenger_count').reset_index()
+
+pivot_df.columns = pivot_df.columns.map('_'.join)
+pivot_df.columns = [col.rstrip('_') for col in pivot_df.columns]
+pivot_df.to_csv('processed_passenger_data.csv', index=False, encoding='cp949')
+```
+7. 통합 데이터 로드 및 처리하기
+가공된 승하차 인원 데이터를 로드하고, 환승 인원 데이터를 통합한다.
+```
+station1 = pd.read_csv("processed_passenger_data.csv", encoding='cp949')
+transfer['역명'] = transfer['역명'].replace('총신대입구(이수)', '총신대입구')
+transfer = transfer.drop(columns='연번')
+transfer = transfer.rename(columns={'평일(일평균)': '환승_Weekday', '토요일': '환승_Saturday', '일요일': '환승_Sunday'})
+station_transfer = pd.merge(station1, transfer, how='outer', on='역명')
+station_transfer = station_transfer.fillna(0)
+station_transfer = station_transfer.sort_values('역번호')
+station_transfer.to_csv('join.csv', index=False, encoding='cp949')
+```
+8. 환승 인원 데이터 스케일링하기
+각 역의 환승 인원을 승하차 인원 비율에 맞춰 조정한다.
+```
+new = station_transfer.copy()
+for station_name in transfer['역명']:
+    selected = station_transfer.loc[station_transfer['역명'] == station_name]
+
+    total_Saturday = selected[['승차_Saturday', '하차_Saturday']].to_numpy().sum()
+    total_Sunday = selected[['승차_Sunday', '하차_Sunday']].to_numpy().sum()
+    total_Weekday = selected[['승차_Weekday', '하차_Weekday']].to_numpy().sum()
+
+    for idx, row in selected.iterrows():
+        scaling_Saturday = (row['승차_Saturday'] + row['하차_Saturday']) / total_Saturday
+        scaling_Sunday = (row['승차_Sunday'] + row['하차_Sunday']) / total_Sunday
+        scaling_Weekday = (row['승차_Weekday'] + row['하차_Weekday']) / total_Weekday
+    
+        new.at[idx, '환승_Saturday'] = row['환승_Saturday'] * scaling_Saturday
+        new.at[idx, '환승_Sunday'] = row['환승_Sunday'] * scaling_Sunday
+        new.at[idx, '환승_Weekday'] = row['환승_Weekday'] * scaling_Weekday
+```
+9. 처리된 데이터를 새로운 CSV파일로 저장하기
+```
+print(new.head)
+new.to_csv('join2.csv', index=False, encoding='cp949')
+```
 
 ## III. Methodology
 ## IV. Evaluation & Analysis
