@@ -141,10 +141,10 @@
 <br>
 
 9. 처리된 데이터를 새로운 CSV파일로 저장하기
-  ``` python
-  print(new.head)
-  new.to_csv('join2.csv', index=False, encoding='cp949')
-  ```
+    ``` python
+    print(new.head)
+    new.to_csv('join2.csv', index=False, encoding='cp949')
+    ```
 
 ## III. Methodology
 ## IV. Evaluation & Analysis
