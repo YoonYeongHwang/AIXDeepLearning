@@ -229,8 +229,8 @@ station.head
   final = final[col]
   final.to_csv('2022_final.csv', index=False, encoding='cp949')
 ```
-## III. Methodology
-## IV. Evaluation & Analysis
+
+###데이터 시각화
 ```python
 import matplotlib.pyplot as plt
 
@@ -553,6 +553,336 @@ plt.show()
 
 ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/cf8e9853-a04f-483b-a5ae-d5835353a62b)
 
+## III. Methodology
+## IV. Evaluation & Analysis
+```python
+import numpy as np
+import pandas as pd
+import torch
+if torch.cuda.is_available():
+    device = "cuda"
+elif torch.backends.mps.is_available():
+    device = "mps"
+else:
+    device = "cpu"
+print(device)
+#check gpu device (if using gpu)
+print(torch.cuda.get_device_name(0))
+```
+
+```python
+df = pd.read_csv("2022_final.csv", encoding='cp949')
+stations_to_remove = df[(df['역번호'] > 1000) | (df['역번호'] < 199)].index
+df.drop(stations_to_remove, inplace=True)
+```
+
+```python
+from sklearn.preprocessing import MinMaxScaler
+
+feature_scaler = MinMaxScaler(feature_range=(0, 1))
+up_weekday_scaler = MinMaxScaler(feature_range=(0, 1))
+up_saturday_scaler = MinMaxScaler(feature_range=(0, 1))
+up_sunday_scaler = MinMaxScaler(feature_range=(0, 1))
+down_weekday_scaler = MinMaxScaler(feature_range=(0, 1))
+down_saturday_scaler = MinMaxScaler(feature_range=(0, 1))
+down_sunday_scaler = MinMaxScaler(feature_range=(0, 1))
+
+features = ['승차_Weekday', '승차_Saturday', '승차_Sunday', '하차_Weekday', '하차_Saturday', '하차_Sunday', '환승_Weekday', '환승_Saturday', '환승_Sunday', 'interval_Weekday', 'interval_Saturday', 'interval_Sunday', 'capacity']
+
+df[features] = feature_scaler.fit_transform(df[features])
+df['상선_Weekday'] = up_weekday_scaler.fit_transform(df['상선_Weekday'].to_frame())
+df['상선_Saturday'] = up_saturday_scaler.fit_transform(df['상선_Saturday'].to_frame())
+df['상선_Sunday'] = up_sunday_scaler.fit_transform(df['상선_Sunday'].to_frame())
+df['하선_Weekday'] = down_weekday_scaler.fit_transform(df['하선_Weekday'].to_frame())
+df['하선_Saturday'] = down_saturday_scaler.fit_transform(df['하선_Saturday'].to_frame())
+df['하선_Sunday'] = down_sunday_scaler.fit_transform(df['하선_Sunday'].to_frame())
+
+df.to_csv('2022_scaled.csv', index=False, encoding='cp949')
+```
+
+```python
+df['progression'] = [0.0] * len(df)
+weekday_up = ['역번호', '승차_Weekday', '하차_Weekday', '환승_Weekday', 'interval_Weekday', 'capacity', 'progression', '상선_Weekday']
+weekday_down = ['역번호', '승차_Weekday', '하차_Weekday', '환승_Weekday', 'interval_Weekday', 'capacity', 'progression', '하선_Weekday']
+weekday_up2 = ['승차_Weekday', '하차_Weekday', '환승_Weekday', 'interval_Weekday', 'capacity', 'progression', '상선_Weekday']
+weekday_down2 = ['승차_Weekday', '하차_Weekday', '환승_Weekday', 'interval_Weekday', 'capacity', 'progression', '하선_Weekday']
+hours = ['06-07시간대', '07-08시간대', '08-09시간대', '09-10시간대', '10-11시간대', '11-12시간대', '12-13시간대', '13-14시간대', '14-15시간대', '15-16시간대', '16-17시간대', '17-18시간대', '18-19시간대', '19-20시간대', '20-21시간대', '21-22시간대', '22-23시간대', '23-24시간대']
+
+start = [0, 0, 0, 9, 5, 10, 10, 9, 10]
+end = [0, 0, 0, 52, 34, 48, 47, 50, 27]
+num_stations = [0, 0, 43, 44, 51, 56, 39, 53, 18]
+
+for line in range(2,9):
+    for period in hours:
+        tmp = df.loc[df['호선'] == line]
+        tmp = tmp[weekday_up]
+        tmp2 = tmp.loc[df['hour'] == period]
+        tmp2 = tmp2.sort_values(by='역번호', axis=0, ascending=False, inplace=False)
+        if (line == 2):
+            tmp2['progression'] = [0.5] * len(tmp2)
+        else:
+            tmp2['progression'] = (num_stations[line] - (tmp2['역번호'] - line * 100 - start[line])) / num_stations[line]
+        tmp3 = tmp2[weekday_up2]
+        pd.DataFrame(tmp3).to_csv(f'weekday_split\\{line}_{period}_up.csv', index=False, encoding='cp949')
+
+    for period in hours:
+        tmp = df.loc[df['호선'] == line]
+        tmp = tmp[weekday_down]
+        tmp2 = tmp.loc[df['hour'] == period]
+        tmp2 = tmp2.sort_values(by='역번호', axis=0, ascending=True, inplace=False)
+        if (line == 2):
+            tmp2['progression'] = [0.5] * len(tmp2)
+        else:
+            tmp2['progression'] = (tmp2['역번호'] - line * 100 - start[line]) / num_stations[line]
+        tmp3 = tmp2[weekday_down2]
+        pd.DataFrame(tmp3).to_csv(f'weekday_split\\{line}_{period}_down.csv', index=False, encoding='cp949')
+```
+
+```python
+saturday_up = ['역번호', '승차_Saturday', '하차_Saturday', '환승_Saturday', 'interval_Saturday', 'capacity', 'progression', '상선_Saturday']
+saturday_down = ['역번호', '승차_Saturday', '하차_Saturday', '환승_Saturday', 'interval_Saturday', 'capacity', 'progression', '하선_Saturday']
+saturday_up2 = ['승차_Saturday', '하차_Saturday', '환승_Saturday', 'interval_Saturday', 'capacity', 'progression', '상선_Saturday']
+saturday_down2 = ['승차_Saturday', '하차_Saturday', '환승_Saturday', 'interval_Saturday', 'capacity', 'progression', '하선_Saturday']
+
+for line in range(2,9):
+    for period in hours:
+        tmp = df.loc[df['호선'] == line]
+        tmp = tmp[saturday_up]
+        tmp2 = tmp.loc[df['hour'] == period]
+        tmp2 = tmp2.sort_values(by='역번호', axis=0, ascending=True, inplace=False)
+        if (line == 2):
+            tmp2['progression'] = [0.5] * len(tmp2)
+        else:
+            tmp2['progression'] = (num_stations[line] - (tmp2['역번호'] - line * 100 - start[line])) / num_stations[line]
+        tmp3 = tmp2[saturday_up2]
+        pd.DataFrame(tmp3).to_csv(f'saturday_split\\{line}_{period}_up.csv', index=False, encoding='cp949')
+
+    for period in hours:
+        tmp = df.loc[df['호선'] == line]
+        tmp = tmp[saturday_down]
+        tmp2 = tmp.loc[df['hour'] == period]
+        tmp2 = tmp2.sort_values(by='역번호', axis=0, ascending=False, inplace=False)
+        if (line == 2):
+            tmp2['progression'] = [0.5] * len(tmp2)
+        else:
+            tmp2['progression'] = (num_stations[line] - (tmp2['역번호'] - line * 100 - start[line])) / num_stations[line]
+        tmp3 = tmp2[saturday_down2]
+        pd.DataFrame(tmp3).to_csv(f'saturday_split\\{line}_{period}_down.csv', index=False, encoding='cp949')
+```
+
+```python
+sunday_up = ['역번호', '승차_Sunday', '하차_Sunday', '환승_Sunday', 'interval_Sunday', 'capacity', 'progression', '상선_Sunday']
+sunday_down = ['역번호', '승차_Sunday', '하차_Sunday', '환승_Sunday', 'interval_Sunday', 'capacity', 'progression', '하선_Sunday']
+sunday_up2 = ['승차_Sunday', '하차_Sunday', '환승_Sunday', 'interval_Sunday', 'capacity', 'progression', '상선_Sunday']
+sunday_down2 = ['승차_Sunday', '하차_Sunday', '환승_Sunday', 'interval_Sunday', 'capacity', 'progression', '하선_Sunday']
+
+for line in range(2, 9):
+    for period in hours:
+        tmp = df.loc[df['호선'] == line]
+        tmp = tmp[sunday_up]
+        tmp2 = tmp.loc[df['hour'] == period]
+        tmp2 = tmp2.sort_values(by='역번호', axis=0, ascending=True, inplace=False)
+        if (line == 2):
+            tmp2['progression'] = [0.5] * len(tmp2)
+        else:
+            tmp2['progression'] = (num_stations[line] - (tmp2['역번호'] - line * 100 - start[line])) / num_stations[line]
+        tmp3 = tmp2[sunday_up2]
+        pd.DataFrame(tmp3).to_csv(f'sunday_split\\{line}_{period}_up.csv', index=False, encoding='cp949')
+
+    for period in hours:
+        tmp = df.loc[df['호선'] == line]
+        tmp = tmp[sunday_down]
+        tmp2 = tmp.loc[df['hour'] == period]
+        tmp2 = tmp2.sort_values(by='역번호', axis=0, ascending=False, inplace=False)
+        if (line == 2):
+            tmp2['progression'] = [0.5] * len(tmp2)
+        else:
+            tmp2['progression'] = (num_stations[line] - (tmp2['역번호'] - line * 100 - start[line])) / num_stations[line]
+        tmp3 = tmp2[sunday_down2]
+        pd.DataFrame(tmp3).to_csv(f'sunday_split\\{line}_{period}_down.csv', index=False, encoding='cp949')
+```
+
+```python
+import torch.nn as nn
+from torch.utils.data import Dataset, DataLoader
+
+# Assume your time series data is already preprocessed and in the format of PyTorch tensors
+# Each time series is a 2D tensor of shape (sequence_length, num_features)
+
+# Training data (multiple time series)
+import os
+# assign directory
+directories = ['weekday_split', 'saturday_split', 'sunday_split']
+time_series_list = []
+X = []
+y = []
+time_steps = 8
+
+for directory in directories:
+    for filename in os.listdir(directory):
+        f = os.path.join(directory, filename)
+        if os.path.isfile(f):
+            tmp = pd.read_csv(f, encoding='cp949')
+            tmp = tmp.astype(float)
+            tens = torch.from_numpy(tmp.values)
+            time_series_list.append(tens)
+
+for ts in time_series_list:
+    for i in range(len(ts) - time_steps):
+        X.append(ts[i:i + time_steps])
+        y.append(ts[i + time_steps, -1])  # Assuming the last feature is the target
+
+y = np.array(y)
+# Convert to PyTorch tensors
+X = torch.stack(X, dim=0)
+X = torch.tensor(X, dtype=torch.float32)
+y = torch.tensor(y, dtype=torch.float32)
+print(X.size())
+print(y.size())
+```
+
+```python
+class TimeSeriesDataset(Dataset):
+    def __init__(self, X, y):
+        self.X = X
+        self.y = y
+
+    def __len__(self):
+        return len(self.X)
+
+    def __getitem__(self, idx):
+        return self.X[idx], self.y[idx].unsqueeze(-1)
+
+dataset = TimeSeriesDataset(X, y)
+
+# Split the dataset into training and validation sets
+train_size = int(0.8 * len(dataset))  # 80% of the data for training
+val_size = len(dataset) - train_size  # Remaining 20% for validation
+
+train_dataset, val_dataset = torch.utils.data.random_split(dataset, [train_size, val_size])
+
+train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
+val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False)
+```
+
+```python
+import torch.nn as nn
+import torch.optim as optim
+
+class LSTMModel(nn.Module):
+    def __init__(self, input_size, hidden_size, num_layers, output_size):
+        super(LSTMModel, self).__init__()
+        self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True)
+        self.fc = nn.Linear(hidden_size, output_size)
+    
+    def forward(self, x):
+        h_0 = torch.zeros(num_layers, x.size(0), hidden_size).to(x.device)
+        c_0 = torch.zeros(num_layers, x.size(0), hidden_size).to(x.device)
+        
+        out, _ = self.lstm(x, (h_0, c_0))
+        out = self.fc(out[:, -1, :])
+        return out
+
+input_size = X.shape[2]  # Number of features in the input data
+hidden_size = 60        # Number of features in the hidden state
+num_layers = 4        # Number of stacked LSTM layers
+output_size = 1          # Number of output features (1 target feature)
+
+model = LSTMModel(input_size, hidden_size, num_layers, output_size).to(device)
+criterion = nn.MSELoss()
+optimizer = optim.Adam(model.parameters(), lr=0.001)
+```
+
+```python
+# Training loop
+num_epochs = 70
+for epoch in range(num_epochs):
+    model.train()
+    for inputs, targets in train_loader:
+        inputs, targets = inputs.to(device), targets.to(device)
+        
+        outputs = model(inputs)
+        loss = criterion(outputs, targets)
+        
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+    
+    # Validation
+    model.eval()
+    val_loss = 0
+    with torch.no_grad():
+        for inputs, targets in val_loader:
+            inputs, targets = inputs.to(device), targets.to(device)
+            outputs = model(inputs)
+            val_loss += criterion(outputs, targets).item()
+    
+    val_loss /= len(val_loader)
+    print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}, Val Loss: {val_loss:.4f}')
+```
+
+```python
+scaled_new_ts = pd.read_csv("4_20-21시간대_up.csv", encoding='cp949')
+scaled_new_ts = scaled_new_ts.to_numpy()
+print(scaled_new_ts.shape)
+```
+
+```python
+# New time series for testing
+actual = scaled_new_ts[:, -1].copy()
+scaled_new_ts[time_steps:, -1] = 0.0
+X_test = scaled_new_ts.copy()
+# Initialize the placeholder for predictions
+predictions = []
+```
+
+```python
+# Make predictions
+model.eval()
+with torch.no_grad():
+    for t in range(time_steps, X_test.shape[0]+1):
+        # Prepare the input for the model
+        X_input = X_test[t-time_steps:t, :]  # Inputs up to the current time step
+        X_input = [X_input]
+        
+        # Convert to tensor
+        X_input_tensor = torch.tensor(X_input, dtype=torch.float32).to(device)
+        
+        # Predict the target feature
+        y_pred = model(X_input_tensor)
+        pred_value = y_pred.cpu().numpy()[0][0]
+        # Update the placeholder with the predictions
+        predictions.append(pred_value)
+        
+        # Update the input with the predicted target feature for the next step
+        if (t != X_test.shape[0]):
+            X_test[t, -1] = pred_value
+        
+predicted = predictions
+actual = actual[time_steps:]
+#predicted = np.reshape(predicted, (-1,1))
+#predicted = down_saturday_scaler.inverse_transform(predicted)  #switch scaler as needed
+#actual = np.reshape(actual, (-1,1))
+#actual = down_saturday_scaler.inverse_transform(actual)
+    
+# Print the final prediction values of the last feature (target feature)
+print("Predicted values:", predicted)  # Remove the extra dimension for readability
+print("Actual values:", actual)
+```
+
+```python
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(12, 6))
+plt.plot(actual, label='Actual')
+plt.plot(predicted, label='Predicted')
+plt.title('Actual vs Predicted Values')
+plt.xlabel('Time Step')
+plt.ylabel('Value')
+plt.legend()
+plt.show()
+```
+![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/844a0cd3-edaf-42b2-b959-f079b81ed73d)
 
 
 ## V. Related Work (e.g., existing studies)
