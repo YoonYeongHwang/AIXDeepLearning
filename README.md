@@ -231,6 +231,330 @@ station.head
 ```
 ## III. Methodology
 ## IV. Evaluation & Analysis
+```python
+import matplotlib.pyplot as plt
+
+plt.rc("font", family="Malgun Gothic")
+
+ticklabel=['~6','6~7', '7~8', '8~9', '9~10', '10~11', '11~12', '12~13', '13~14', '14~15', '15~16', '16~17', '17~18', '18~19', '19~20', '20~21', '21~22', '22~23','23~24','24~']
+
+
+# 특정 역에 대한 데이터 필터링 (예: 청량리 역)
+station_data = data[data['역명'] == '청량리']
+
+# 시간대별 승차 인원 시각화 (평일)
+plt.figure(figsize=(12, 6))
+plt.plot(station_data['hour'], station_data['승차_Weekday'], label='승차_Weekday')
+plt.plot(station_data['hour'], station_data['하차_Weekday'], label='하차_Weekday')
+plt.title('승차 및 하차 인원 (평일, 청량리 역)')
+plt.xlabel('시간대')
+plt.ylabel('인원수')
+plt.xticks(ticks=station_data['hour'], labels=ticklabel[:len(station_data['hour'])])
+plt.legend()
+plt.show()
+
+# 시간대별 상선/하선 혼잡도 시각화 (평일)
+plt.figure(figsize=(12, 6))
+plt.plot(station_data['hour'], station_data['상선_Weekday'], label='상선_Weekday')
+plt.plot(station_data['hour'], station_data['하선_Weekday'], label='하선_Weekday')
+plt.title('상선 및 하선 혼잡도 (평일, 청량리 역)')
+plt.xlabel('시간대')
+plt.ylabel('혼잡도')
+plt.xticks(ticks=station_data['hour'], labels=ticklabel[:len(station_data['hour'])])
+plt.legend()
+plt.show()
+```
+![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/0434f090-2952-4cef-b0af-7722dd987526)
+![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/920af747-bac8-4e4d-88fa-72424c69eb9a)
+
+```python
+# 특정 역에 대한 데이터 필터링 (예: 청량리 역)
+station_data = data[data['역명'] == '청량리']
+
+# 시간대별 승차 인원 시각화 (토요일)
+plt.figure(figsize=(12, 6))
+plt.plot(station_data['hour'], station_data['승차_Saturday'], label='승차_Saturday')
+plt.plot(station_data['hour'], station_data['하차_Saturday'], label='하차_Saturday')
+plt.title('승차 및 하차 인원 (토요일, 청량리 역)')
+plt.xlabel('시간대')
+plt.ylabel('인원수')
+plt.xticks(ticks=station_data['hour'], labels=ticklabel[:len(station_data['hour'])])
+plt.legend()
+plt.show()
+
+# 시간대별 상선/하선 혼잡도 시각화 (토요일)
+plt.figure(figsize=(12, 6))
+plt.plot(station_data['hour'], station_data['상선_Saturday'], label='상선_Saturday')
+plt.plot(station_data['hour'], station_data['하선_Saturday'], label='하선_Saturday')
+plt.title('상선 및 하선 혼잡도 (토요일, 청량리 역)')
+plt.xlabel('시간대')
+plt.ylabel('혼잡도')
+plt.xticks(ticks=station_data['hour'], labels=ticklabel[:len(station_data['hour'])])
+plt.legend()
+plt.show()
+```
+![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/e742c129-9ab1-4da5-8faa-4e06d8182a20)
+![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/48731efa-e45a-4a3b-a5d0-af57d5ba4b4c)
+
+```python
+# 특정 역에 대한 데이터 필터링 (예: 청량리 역)
+station_data = data[data['역명'] == '청량리']
+
+# 시간대별 승차 인원 시각화 (일요일)
+plt.figure(figsize=(12, 6))
+plt.plot(station_data['hour'], station_data['승차_Sunday'], label='승차_Sunday')
+plt.plot(station_data['hour'], station_data['하차_Sunday'], label='하차_Sunday')
+plt.title('승차 및 하차 인원 (일요일, 청량리 역)')
+plt.xlabel('시간대')
+plt.ylabel('인원수')
+plt.xticks(ticks=station_data['hour'], labels=ticklabel[:len(station_data['hour'])])
+plt.legend()
+plt.show()
+
+# 시간대별 상선/하선 혼잡도 시각화 (일요일)
+plt.figure(figsize=(12, 6))
+plt.plot(station_data['hour'], station_data['상선_Sunday'], label='상선_Sunday')
+plt.plot(station_data['hour'], station_data['하선_Sunday'], label='하선_Sunday')
+plt.title('상선 및 하선 혼잡도 (일요일, 청량리 역)')
+plt.xlabel('시간대')
+plt.ylabel('혼잡도')
+plt.xticks(ticks=station_data['hour'], labels=ticklabel[:len(station_data['hour'])])
+plt.legend()
+plt.show()
+```
+![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/53109601-ac87-485c-9b04-fef127567807)
+![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/2267267a-98ff-4ddd-b2cc-30946bbac01f)
+
+
+```python
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# 한글 폰트 설정
+plt.rc("font", family="Malgun Gothic")
+
+# '07-08시간대' 데이터 필터링
+df_filtered = data[data['hour'] == '07-08시간대'].copy()
+
+# 역별 승하차 인원 시각화
+plt.figure(figsize=(14, 7))
+
+# 승하차 인원 시각화
+plt.subplot(1, 2, 1)
+sns.barplot(x='역명', y='승차_Weekday', data=df_filtered, color='blue', label='승차_Weekday')
+sns.barplot(x='역명', y='하차_Weekday', data=df_filtered, color='red', label='하차_Weekday', alpha=0.7)
+plt.title('역별 승하차 인원 (07-08시간대)')
+plt.xlabel('역명')
+plt.ylabel('인원 수')
+plt.legend()
+
+# 역별 상선 및 하선 혼잡도 시각화
+plt.subplot(1, 2, 2)
+sns.barplot(x='역명', y='상선_Weekday', data=df_filtered, color='blue', label='상선_혼잡도')
+sns.barplot(x='역명', y='하선_Weekday', data=df_filtered, color='red', label='하선_혼잡도', alpha=0.7)
+plt.title('역별 혼잡도 (07-08시간대)')
+plt.xlabel('역명')
+plt.ylabel('혼잡도')
+plt.legend()
+
+plt.tight_layout()
+plt.show()
+```
+
+![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/755503cc-4e5a-4eaf-b13d-d4fbe9bf65bf)
+
+```python
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# 한글 폰트 설정
+plt.rc("font", family="Malgun Gothic")
+
+# '07-08시간대' 데이터 필터링
+df_filtered = data[data['hour'] == '07-08시간대'].copy()
+
+# 그래프 그리기
+fig, ax1 = plt.subplots(figsize=(14, 7))
+
+# 막대그래프 - 승차 인원
+sns.barplot(x='역명', y='승차_Weekday', data=df_filtered, color='blue', label='승차_Weekday', ax=ax1)
+sns.barplot(x='역명', y='하차_Weekday', data=df_filtered, color='red', label='하차_Weekday', alpha=0.7, ax=ax1)
+
+# x축 라벨 및 y축 라벨 설정
+ax1.set_xlabel('역명')
+ax1.set_ylabel('승하차 인원 수')
+ax1.legend(loc='upper left')
+
+# 꺾은선 그래프를 위한 두 번째 y축 생성
+ax2 = ax1.twinx()
+ax2.plot(df_filtered['역명'], df_filtered['상선_Weekday'], color='green', marker='o', linestyle='None', label='상선_혼잡도')
+ax2.plot(df_filtered['역명'], df_filtered['하선_Weekday'], color='orange', marker='o', linestyle='None', label='하선_혼잡도')
+ax2.set_ylabel('혼잡도')
+
+# 꺾은선 그래프의 범례 설정
+ax2.legend(loc='upper right')
+
+# 그래프 제목 설정
+plt.title('역별 승하차 인원 및 혼잡도 (07-08시간대)')
+
+# 레이아웃 조정 및 그래프 표시
+fig.tight_layout()
+plt.show()
+```
+![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/dd36efac-1e0c-4af7-b2bb-2466211c1098)
+
+```python
+import matplotlib.pyplot as plt
+
+plt.rc("font", family="Malgun Gothic")
+
+ticklabel=['~6','6~7', '7~8', '8~9', '9~10', '10~11', '11~12', '12~13', '13~14', '14~15', '15~16', '16~17', '17~18', '18~19', '19~20', '20~21', '21~22', '22~23','23~24','24~']
+
+
+# 특정 역에 대한 데이터 필터링 (예: 청량리 역)
+station_data = data[data['역명'] == '청량리']
+
+# 시간대별 배차간격 인원 시각화 (평일)
+plt.figure(figsize=(12, 6))
+plt.plot(station_data['hour'], station_data['interval_Weekday'], label='interval_Weekday')
+plt.title('배차간격 (평일, 청량리 역)')
+plt.xlabel('시간대')
+plt.ylabel('배차간격')
+plt.xticks(ticks=station_data['hour'], labels=ticklabel[:len(station_data['hour'])])
+plt.legend()
+plt.show()
+
+# 시간대별 상선/하선 혼잡도 시각화 (평일)
+plt.figure(figsize=(12, 6))
+plt.plot(station_data['hour'], station_data['상선_Weekday'], label='상선_Weekday')
+plt.plot(station_data['hour'], station_data['하선_Weekday'], label='하선_Weekday')
+plt.title('상선 및 하선 혼잡도 (평일, 청량리 역)')
+plt.xlabel('시간대')
+plt.ylabel('혼잡도')
+plt.xticks(ticks=station_data['hour'], labels=ticklabel[:len(station_data['hour'])])
+plt.legend()
+plt.show()
+```
+
+![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/4f8e7f25-8e90-4c30-9fcb-b572d4401d7d)
+![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/2975fb1d-b11d-4e2f-b994-907ac10de4c5)
+
+```python
+import matplotlib.pyplot as plt
+
+plt.rc("font", family="Malgun Gothic")
+
+ticklabel=['~6','6~7', '7~8', '8~9', '9~10', '10~11', '11~12', '12~13', '13~14', '14~15', '15~16', '16~17', '17~18', '18~19', '19~20', '20~21', '21~22', '22~23','23~24','24~']
+
+
+# 특정 역에 대한 데이터 필터링 (예: 청량리 역)
+station_data = data[data['역명'] == '청량리']
+
+# 시간대별 배차간격 인원 시각화 (토요일)
+plt.figure(figsize=(12, 6))
+plt.plot(station_data['hour'], station_data['interval_Saturday'], label='interval_Saturday')
+plt.title('배차간격 (토요일, 청량리 역)')
+plt.xlabel('시간대')
+plt.ylabel('배차간격')
+plt.xticks(ticks=station_data['hour'], labels=ticklabel[:len(station_data['hour'])])
+plt.legend()
+plt.show()
+
+# 시간대별 상선/하선 혼잡도 시각화 (토요일)
+plt.figure(figsize=(12, 6))
+plt.plot(station_data['hour'], station_data['상선_Saturday'], label='상선_Saturday')
+plt.plot(station_data['hour'], station_data['하선_Saturday'], label='하선_Saturday')
+plt.title('상선 및 하선 혼잡도 (토요일, 청량리 역)')
+plt.xlabel('시간대')
+plt.ylabel('혼잡도')
+plt.xticks(ticks=station_data['hour'], labels=ticklabel[:len(station_data['hour'])])
+plt.legend()
+plt.show()
+```
+
+![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/6eb678fb-8f30-46ef-86aa-b4f73ceb3090)
+![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/2b242431-064f-4aba-aa4a-923143e9b087)
+
+```python
+import matplotlib.pyplot as plt
+
+plt.rc("font", family="Malgun Gothic")
+
+ticklabel=['~6','6~7', '7~8', '8~9', '9~10', '10~11', '11~12', '12~13', '13~14', '14~15', '15~16', '16~17', '17~18', '18~19', '19~20', '20~21', '21~22', '22~23','23~24','24~']
+
+
+# 특정 역에 대한 데이터 필터링 (예: 청량리 역)
+station_data = data[data['역명'] == '청량리']
+
+# 시간대별 배차간격 인원 시각화 (일요일)
+plt.figure(figsize=(12, 6))
+plt.plot(station_data['hour'], station_data['interval_Sunday'], label='interval_Sunday')
+plt.title('배차간격 (일요일, 청량리 역)')
+plt.xlabel('시간대')
+plt.ylabel('배차간격')
+plt.xticks(ticks=station_data['hour'], labels=ticklabel[:len(station_data['hour'])])
+plt.legend()
+plt.show()
+
+# 시간대별 상선/하선 혼잡도 시각화 (일요일)
+plt.figure(figsize=(12, 6))
+plt.plot(station_data['hour'], station_data['상선_Sunday'], label='상선_Sunday')
+plt.plot(station_data['hour'], station_data['하선_Sunday'], label='하선_Sunday')
+plt.title('상선 및 하선 혼잡도 (일요일, 청량리 역)')
+plt.xlabel('시간대')
+plt.ylabel('혼잡도')
+plt.xticks(ticks=station_data['hour'], labels=ticklabel[:len(station_data['hour'])])
+plt.legend()
+plt.show()
+```
+
+![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/98ba921d-1bfd-41a6-bb96-041c252e0751)
+![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/06516f00-0801-4513-9881-d9d8b948475b)
+
+```python
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# 한글 폰트 설정
+plt.rc("font", family="Malgun Gothic")
+
+# '07-08시간대' 데이터 필터링
+line_number = 1  # 원하는 호선 번호를 설정
+df_filtered = data[(data['hour'] == '07-08시간대') & (data['호선'] == line_number)].copy()
+
+# 그래프 그리기
+fig, ax1 = plt.subplots(figsize=(14, 7))
+
+# 막대그래프 - 승차 인원
+sns.barplot(x='역명', y='승차_Weekday', data=df_filtered, color='blue', label='승차_Weekday', ax=ax1)
+sns.barplot(x='역명', y='하차_Weekday', data=df_filtered, color='red', label='하차_Weekday', alpha=0.7, ax=ax1)
+
+# x축 라벨 및 y축 라벨 설정
+ax1.set_xlabel('역명')
+ax1.set_ylabel('승하차 인원 수')
+ax1.legend(loc='upper left')
+
+# 꺾은선 그래프를 위한 두 번째 y축 생성
+ax2 = ax1.twinx()
+ax2.plot(df_filtered['역명'], df_filtered['상선_Weekday'], color='green', marker='o', label='상선_혼잡도')
+ax2.plot(df_filtered['역명'], df_filtered['하선_Weekday'], color='orange', marker='o', label='하선_혼잡도')
+ax2.set_ylabel('혼잡도')
+
+# 꺾은선 그래프의 범례 설정
+ax2.legend(loc='upper right')
+
+# 그래프 제목 설정
+plt.title(f'{line_number}호선 역별 승하차 인원 및 혼잡도 (07-08시간대)')
+
+# 레이아웃 조정 및 그래프 표시
+fig.tight_layout()
+plt.show()
+```
+
+![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/cf8e9853-a04f-483b-a5ae-d5835353a62b)
+
+
+
 ## V. Related Work (e.g., existing studies)
 *Time Series Forecasting using Pytorch
   -https://www.geeksforgeeks.org/time-series-forecasting-using-pytorch/
