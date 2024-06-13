@@ -128,14 +128,14 @@ pivot_df = pivot_df.sort_values(by=['역번호', 'hour']).reset_index(drop=True)
 #pivot_df.to_csv('cleaned_station_data.csv', index=False, encoding='cp949')
 ```
 
-*피벗 테이블의 다중 인덱스 열 이름을 단일 문자열로 결합하고, 불필요한 '_'를 제거해 깔끔하게 정리한다.
+* 피벗 테이블의 다중 인덱스 열 이름을 단일 문자열로 결합하고, 불필요한 '_'를 제거해 깔끔하게 정리한다.
 ```python
 pivot_df.columns = pivot_df.columns.map('_'.join)
 pivot_df.columns = [col.rstrip('_') for col in pivot_df.columns]
 ```
 
 6. 특정 역의 승하차량 보정
-*충무로역의 3호선 승하차량이 모두 4호선의 데이터로 집계되어있어, 3,4호선 각각의 승하차량 비율에 따라 나눈다.
+* 충무로역의 3호선 승하차량이 모두 4호선의 데이터로 집계되어있어, 3,4호선 각각의 승하차량 비율에 따라 나눈다.
 ```python
 rate_3 = 1304648 / 2420033
 rate_4 = 1115385 / 2420033
@@ -149,7 +149,7 @@ for idx, row in Chungmuro.iterrows():
   for col in columns:
     pivot_df.at[idx, col] = row[col] * rate_4
 ```
-*연신내역의 6호선 승하차량이 모두 3호선의 데이터로 집계되어있어, 3,6호선 각각의 승하차량 비율에 따라 나눈다.
+* 연신내역의 6호선 승하차량이 모두 3호선의 데이터로 집계되어있어, 3,6호선 각각의 승하차량 비율에 따라 나눈다.
 ```python
 rate_3 = 1115385 / 1708420
 rate_6 = 593035 / 1708420
@@ -162,7 +162,7 @@ for idx, row in Yeonsinnae.iterrows():
     pivot_df.at[idx, col] = row[col] * rate_3
 ```
 
-*창동역의 1호선(경원선) 승하차량이 모두 4호선의 데이터로 집계되어있어, 1,4호선 각각의 승하차량 비율에 따라 나눈다.
+* 창동역의 1호선(경원선) 승하차량이 모두 4호선의 데이터로 집계되어있어, 1,4호선 각각의 승하차량 비율에 따라 나눈다.
 ```python
 rate_4 = 1304648 / 3395546
 Chang_dong = pivot_df.loc[(pivot_df['역명'] == '창동') & (pivot_df['호선'] == 4)]
@@ -245,7 +245,7 @@ congestion["출발역"] = congestion["출발역"].replace("올림픽공원(한�
 ```
 
 11. 시간대별 혼잡도 데이터 정리
-*시간대별 혼잡도 데이터를 'hours' 배열에 맞춰 새롭게 정리하고 저장한다.
+* 시간대별 혼잡도 데이터를 'hours' 배열에 맞춰 새롭게 정리하고 저장한다.
 ```python
 congestion1 = congestion.copy()
 time = ['5시30분', '6시00분', '6시30분', '7시00분', '7시30분', '8시00분', '8시30분', '9시00분', '9시30분', '10시00분', '10시30분', '11시00분', '11시30분', '12시00분', '12시30분', '13시00분', '13시30분', '14시00분', '14시30분', '15시00분', '15시30분', '16시00분', '16시30분', '17시00분', '17시30분', '18시00분', '18시30분', '19시00분', '19시30분', '20시00분', '20시30분', '21시00분', '21시30분', '22시00분', '22시30분', '23시00분', '23시30분', '00시00분', '00시30분']
@@ -262,7 +262,7 @@ congestion1.to_csv('congestion1.csv', index=False, encoding='cp949')
 ```
 
 12. 혼잡도 데이터 재구성하여 저장하기
-*'congestion1' 데이터프레임에서 요일, 호선, 역번호, 출발역, 상하구분을 기준으로 '시간대'와 '이용객수' 열을 재구성하여 새로운 데이터프레임 'congestion2'를 생성한다.
+* 'congestion1' 데이터프레임에서 요일, 호선, 역번호, 출발역, 상하구분을 기준으로 '시간대'와 '이용객수' 열을 재구성하여 새로운 데이터프레임 'congestion2'를 생성한다.
 *이 데이터를 피벗하여 상하구분과 요일구분을 기준으로 새로운 열을 생성한 후, 열 이름을 지정된 형식에 맞게 변경하고 인덱스를 재설정하여 'congestion3' 데이터프레임을 준비한다.
 ```python
 congestion2 = congestion1.melt(id_vars=['요일구분', '호선', '역번호', '출발역', '상하구분'], 
@@ -299,7 +299,8 @@ congestion3.to_csv('congestion3.csv', index=False, encoding='cp949')
   final.to_csv('2022_final.csv', index=False, encoding='cp949')
 ```
 
-###데이터 시각화
+### 데이터 시각화
+
 ```python
 import matplotlib.pyplot as plt
 
@@ -624,7 +625,7 @@ plt.show()
 
 
 ## III. Methodology
-###LSTM
+### LSTM
 
 ## IV. Evaluation & Analysis
 ```python
