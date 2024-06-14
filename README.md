@@ -30,22 +30,11 @@
     ```
 
 ### Dataset 전처리
-1. 필요한 라이브러리 가져오기 및 GPU/CPU 디바이스 설정:
+1. 필요한 라이브러리 가져오기
 ``` python
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-    
-import torch
-if torch.cuda.is_available():
-  device = "cuda"
-elif torch.backends.mps.is_available():
-  device = "mps"
-else:
-  device = "cpu"
-print(device)
-    
-print(torch.cuda.get_device_name(0))
 ```
 <br>
   
@@ -300,7 +289,7 @@ congestion3.to_csv('congestion3.csv', index=False, encoding='cp949')
 ```
 
 ### 데이터 시각화
-1. 요일별(평일, 토요일, 일요일) 시간대별 승차 인원 및 상/하선 혼잡도
+1. 각 요일의의(평일, 토요일, 일요일) 시간대별 승차 인원 및 상/하선 혼잡도
 * 평일 시간대별 승차 인원 및 상/하선 혼잡도(예: 청량리역)
 ```python
 import matplotlib.pyplot as plt
@@ -477,8 +466,8 @@ plt.show()
 ```
 ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/dd36efac-1e0c-4af7-b2bb-2466211c1098)
 
-2. 요일별(평일, 토요일, 일요일)
-* 평일 
+2. 각 요일의(평일, 토요일, 일요일) 시간대별 배차간격 및 혼잡도
+* 평일 시간대별 배차간격 및 혼잡도(예: 청량리역)
 ```python
 import matplotlib.pyplot as plt
 
@@ -515,7 +504,7 @@ plt.show()
 ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/4f8e7f25-8e90-4c30-9fcb-b572d4401d7d)
 ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/2975fb1d-b11d-4e2f-b994-907ac10de4c5)
 
-* 토요일 
+* 토요일 시간대별 배차간격 및 혼잡도(예: 청량리역)
 ```python
 import matplotlib.pyplot as plt
 
@@ -552,7 +541,7 @@ plt.show()
 ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/6eb678fb-8f30-46ef-86aa-b4f73ceb3090)
 ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/2b242431-064f-4aba-aa4a-923143e9b087)
 
-* 일요일 
+* 일요일 시간대별 배차간격 및 혼잡도(예: 청량리역)
 ```python
 import matplotlib.pyplot as plt
 
@@ -589,7 +578,7 @@ plt.show()
 ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/98ba921d-1bfd-41a6-bb96-041c252e0751)
 ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/06516f00-0801-4513-9881-d9d8b948475b)
 
-* 
+* 특정 호선 특정 시간대 역별 승하차 인원 및 혼잡도(예: 1호선, 07-08시간대)
 ```python
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -637,6 +626,7 @@ plt.show()
 ### LSTM
 
 ## IV. Evaluation & Analysis
+1. 필요한 라이브러리 가져오기 및 GPU/CPU 디바이스 설정
 ```python
 import numpy as np
 import pandas as pd
@@ -652,12 +642,15 @@ print(device)
 print(torch.cuda.get_device_name(0))
 ```
 
+2. 역번호가 199보다 작거나 1000보다 큰 역의 데이터를 제거하여 데이터프레임 재구성
 ```python
 df = pd.read_csv("2022_final.csv", encoding='cp949')
 stations_to_remove = df[(df['역번호'] > 1000) | (df['역번호'] < 199)].index
 df.drop(stations_to_remove, inplace=True)
 ```
 
+3. MinMaxScaler 이용하여 데이터 스케일링하기
+* MinMaxScaler import 및 각각의 스케일러 초기화하기
 ```python
 from sklearn.preprocessing import MinMaxScaler
 
@@ -668,7 +661,10 @@ up_sunday_scaler = MinMaxScaler(feature_range=(0, 1))
 down_weekday_scaler = MinMaxScaler(feature_range=(0, 1))
 down_saturday_scaler = MinMaxScaler(feature_range=(0, 1))
 down_sunday_scaler = MinMaxScaler(feature_range=(0, 1))
+```
 
+* 평일, 토요일, 일요일 상/하선 데이터들을 각각의 스케일러를 사용하여 스케일링하고 csv파일로 저장하기
+```python
 features = ['승차_Weekday', '승차_Saturday', '승차_Sunday', '하차_Weekday', '하차_Saturday', '하차_Sunday', '환승_Weekday', '환승_Saturday', '환승_Sunday', 'interval_Weekday', 'interval_Saturday', 'interval_Sunday', 'capacity']
 
 df[features] = feature_scaler.fit_transform(df[features])
@@ -681,7 +677,7 @@ df['하선_Sunday'] = down_sunday_scaler.fit_transform(df['하선_Sunday'].to_fr
 
 df.to_csv('2022_scaled.csv', index=False, encoding='cp949')
 ```
-
+* 데이터프레임에 'progression'열 생성 및 각 리스트 정의하기(평일)
 ```python
 df['progression'] = [0.0] * len(df)
 weekday_up = ['역번호', '승차_Weekday', '하차_Weekday', '환승_Weekday', 'interval_Weekday', 'capacity', 'progression', '상선_Weekday']
@@ -689,7 +685,11 @@ weekday_down = ['역번호', '승차_Weekday', '하차_Weekday', '환승_Weekday
 weekday_up2 = ['승차_Weekday', '하차_Weekday', '환승_Weekday', 'interval_Weekday', 'capacity', 'progression', '상선_Weekday']
 weekday_down2 = ['승차_Weekday', '하차_Weekday', '환승_Weekday', 'interval_Weekday', 'capacity', 'progression', '하선_Weekday']
 hours = ['06-07시간대', '07-08시간대', '08-09시간대', '09-10시간대', '10-11시간대', '11-12시간대', '12-13시간대', '13-14시간대', '14-15시간대', '15-16시간대', '16-17시간대', '17-18시간대', '18-19시간대', '19-20시간대', '20-21시간대', '21-22시간대', '22-23시간대', '23-24시간대']
+```
 
+* 각 노선의 평일 상/하행 데이터를 시간대별로 분리하여 정리한 후, 해당 데이터를 csv파일로 저장한다.
+* 2호선의 경우 progression 값을 0.5로 설정하고 이외의 노선은 역번호와 시작 번호를 기반으로 progression 값을 계산한다.
+```python
 start = [0, 0, 0, 9, 5, 10, 10, 9, 10]
 end = [0, 0, 0, 52, 34, 48, 47, 50, 27]
 num_stations = [0, 0, 43, 44, 51, 56, 39, 53, 18]
@@ -720,12 +720,17 @@ for line in range(2,9):
         pd.DataFrame(tmp3).to_csv(f'weekday_split\\{line}_{period}_down.csv', index=False, encoding='cp949')
 ```
 
+* 데이터프레임에 'progression'열 생성 및 각 리스트 정의하기(토요일)
 ```python
 saturday_up = ['역번호', '승차_Saturday', '하차_Saturday', '환승_Saturday', 'interval_Saturday', 'capacity', 'progression', '상선_Saturday']
 saturday_down = ['역번호', '승차_Saturday', '하차_Saturday', '환승_Saturday', 'interval_Saturday', 'capacity', 'progression', '하선_Saturday']
 saturday_up2 = ['승차_Saturday', '하차_Saturday', '환승_Saturday', 'interval_Saturday', 'capacity', 'progression', '상선_Saturday']
 saturday_down2 = ['승차_Saturday', '하차_Saturday', '환승_Saturday', 'interval_Saturday', 'capacity', 'progression', '하선_Saturday']
+```
 
+* 각 노선의 토요일 상/하행 데이터를 시간대별로 분리하여 정리한 후, 해당 데이터를 csv파일로 저장한다.
+* 2호선의 경우 progression 값을 0.5로 설정하고 이외의 노선은 역번호와 시작 번호를 기반으로 progression 값을 계산한다.
+```python
 for line in range(2,9):
     for period in hours:
         tmp = df.loc[df['호선'] == line]
@@ -752,12 +757,17 @@ for line in range(2,9):
         pd.DataFrame(tmp3).to_csv(f'saturday_split\\{line}_{period}_down.csv', index=False, encoding='cp949')
 ```
 
+* 데이터프레임에 'progression'열 생성 및 각 리스트 정의하기(일요일)
 ```python
 sunday_up = ['역번호', '승차_Sunday', '하차_Sunday', '환승_Sunday', 'interval_Sunday', 'capacity', 'progression', '상선_Sunday']
 sunday_down = ['역번호', '승차_Sunday', '하차_Sunday', '환승_Sunday', 'interval_Sunday', 'capacity', 'progression', '하선_Sunday']
 sunday_up2 = ['승차_Sunday', '하차_Sunday', '환승_Sunday', 'interval_Sunday', 'capacity', 'progression', '상선_Sunday']
 sunday_down2 = ['승차_Sunday', '하차_Sunday', '환승_Sunday', 'interval_Sunday', 'capacity', 'progression', '하선_Sunday']
+```
 
+* 각 노선의 일요일 상/하행 데이터를 시간대별로 분리하여 정리한 후, 해당 데이터를 csv파일로 저장한다.
+* 2호선의 경우 progression 값을 0.5로 설정하고 이외의 노선은 역번호와 시작 번호를 기반으로 progression 값을 계산한다.
+```python
 for line in range(2, 9):
     for period in hours:
         tmp = df.loc[df['호선'] == line]
@@ -783,6 +793,7 @@ for line in range(2, 9):
         tmp3 = tmp2[sunday_down2]
         pd.DataFrame(tmp3).to_csv(f'sunday_split\\{line}_{period}_down.csv', index=False, encoding='cp949')
 ```
+
 
 ```python
 import torch.nn as nn
