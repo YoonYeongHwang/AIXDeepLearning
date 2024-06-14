@@ -300,7 +300,8 @@ congestion3.to_csv('congestion3.csv', index=False, encoding='cp949')
 ```
 
 ### 데이터 시각화
-
+1. 요일별(평일, 토요일, 일요일) 시간대별 승차 인원 및 상/하선 혼잡도
+* 평일 시간대별 승차 인원 및 상/하선 혼잡도(예: 청량리역)
 ```python
 import matplotlib.pyplot as plt
 
@@ -337,6 +338,7 @@ plt.show()
 ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/0434f090-2952-4cef-b0af-7722dd987526)
 ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/920af747-bac8-4e4d-88fa-72424c69eb9a)
 
+* 토요일 시간대별 승차 인원 및 상/하선 혼잡도(예: 청량리역)
 ```python
 # 특정 역에 대한 데이터 필터링 (예: 청량리 역)
 station_data = data[data['역명'] == '청량리']
@@ -366,6 +368,7 @@ plt.show()
 ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/e742c129-9ab1-4da5-8faa-4e06d8182a20)
 ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/48731efa-e45a-4a3b-a5d0-af57d5ba4b4c)
 
+* 일요일 시간대별 승차 인원 및 상/하선 혼잡도(예: 청량리역)
 ```python
 # 특정 역에 대한 데이터 필터링 (예: 청량리 역)
 station_data = data[data['역명'] == '청량리']
@@ -395,7 +398,7 @@ plt.show()
 ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/53109601-ac87-485c-9b04-fef127567807)
 ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/2267267a-98ff-4ddd-b2cc-30946bbac01f)
 
-
+* 역별 승하차 인원, 역별 상/하선 혼잡도 시각화 (예: 07-08 시간대)
 ```python
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -433,6 +436,7 @@ plt.show()
 
 ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/755503cc-4e5a-4eaf-b13d-d4fbe9bf65bf)
 
+* 역별 승하차 인원과 역별 상/하선 혼잡도를 한눈에 비교할 수 있도록 한 그래프 안에 시각화한다. (예: 07-08 시간대)
 ```python
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -473,6 +477,8 @@ plt.show()
 ```
 ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/dd36efac-1e0c-4af7-b2bb-2466211c1098)
 
+2. 요일별(평일, 토요일, 일요일)
+* 평일 
 ```python
 import matplotlib.pyplot as plt
 
@@ -509,6 +515,7 @@ plt.show()
 ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/4f8e7f25-8e90-4c30-9fcb-b572d4401d7d)
 ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/2975fb1d-b11d-4e2f-b994-907ac10de4c5)
 
+* 토요일 
 ```python
 import matplotlib.pyplot as plt
 
@@ -545,6 +552,7 @@ plt.show()
 ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/6eb678fb-8f30-46ef-86aa-b4f73ceb3090)
 ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/2b242431-064f-4aba-aa4a-923143e9b087)
 
+* 일요일 
 ```python
 import matplotlib.pyplot as plt
 
@@ -581,6 +589,7 @@ plt.show()
 ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/98ba921d-1bfd-41a6-bb96-041c252e0751)
 ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/06516f00-0801-4513-9881-d9d8b948475b)
 
+* 
 ```python
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -959,9 +968,9 @@ plt.show()
 
 
 ## V. Related Work (e.g., existing studies)
-*Time Series Forecasting using Pytorch
-  -https://www.geeksforgeeks.org/time-series-forecasting-using-pytorch/
-*Multivariate Time Series Forecasting Using LSTM
-  -https://medium.com/@786sksujanislam786/multivariate-time-series-forecasting-using-lstm-4f8a9d32a509
+* Time Series Forecasting using Pytorch
+  - https://www.geeksforgeeks.org/time-series-forecasting-using-pytorch/
+* Multivariate Time Series Forecasting Using LSTM
+  - https://medium.com/@786sksujanislam786/multivariate-time-series-forecasting-using-lstm-4f8a9d32a509
 
 ## VI. Conclusion: Discussion
