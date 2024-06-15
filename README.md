@@ -5,8 +5,8 @@
 3. [Datasets](#ii-datasets)
 4. [Methodology](#iii-methodology)
 5. [Evaluation & Analysis](#iv-evaluation--analysis)
-6. [Related Work](#v-related-work)
-7. [Conclusion](#vi-conclusion)
+6. [Related Work](#v-related-work-eg-existing-studies)
+7. [Conclusion](#vi-conclusion-discussion)
 
 ## Members
 - 강민성 | 한양대 컴퓨터소프트웨어학부
