@@ -627,28 +627,65 @@ plt.show()
 
 ## III. Methodology
 ### Long Short Term Memory (LSTM)
-LSTM(Long Short Term Memory) 모델은 기존 RNN(Recurrent Neural Network)의 기울기 소실 문제를 해결하기 위해 개발되었다. LSTM은 RNN의 기본 구조에 셀 상태(Cell state)와 세 가지 게이트를 추가한 구조를 가지고 있다. 이 세 가지 게이트는 Forget Gate, Input Gate, Output Gate로 구성된다.
+LSTM(Long Short Term Memory) 모델은 기존 RNN(Recurrent Neural Network)의 기울기 소실 문제를 해결하기 위해 개발되었다. LSTM은 RNN의 기본 구조에 셀 상태(Cell state)와 세 가지 게이트를 추가한 구조를 가지고 있다. 이 세 가지 게이트는 Forget Gate, Input Gate, Output Gate로 구성된다. 
+
+<br>
+
 ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/71d3a251-7669-48f5-ba0c-1620009e5c1b)
 ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/214e0a58-2108-4ea6-989b-59a44e16f966)
 
 <br>
 
-세 가지 게이트는 다음과 같은 역할을 합니다:
+세 가지 게이트는 다음과 같은 역할을 한다:
+- **Forget Gate (망각 게이트):** 과거의 불필요한 정보를 잊도록 결정
+- **Input Gate (입력 게이트):** 현재의 정보를 기억하도록 결정
+- **Output Gate (출력 게이트):** 어떤 정보를 출력할지 결정
 
-<br>
 
-Forget Gate (망각 게이트): 과거의 불필요한 정보를 잊도록 결정합니다.
-Input Gate (입력 게이트): 현재의 정보를 기억하도록 결정합니다.
-Output Gate (출력 게이트): 어떤 정보를 출력할지 결정합니다.
 
-<br>
+LSTM 네트워크는 셀 상태와 은닉 상태를 통해 다음과 같은 방식으로 정보를 업데이트한다:
 
-LSTM 네트워크는 셀 상태와 은닉 상태를 통해 다음과 같은 방식으로 정보를 업데이트합니다:
+1. **셀 상태(Cell State):** 긴 시간 동안 정보를 유지하는 역할을 하며, 많은 시점에 걸쳐 정보를 전달
+2. **은닉 상태(Hidden State):** 단기적인 정보를 제공하며, 현재 입력과 셀 상태를 기반으로 매 시점마다 업데이트
 
-셀 상태(Cell State): 긴 시간 동안 정보를 유지하는 역할을 하며, 많은 시점에 걸쳐 정보를 전달합니다.
-은닉 상태(Hidden State): 단기적인 정보를 제공하며, 현재 입력과 셀 상태를 기반으로 매 시점마다 업데이트됩니다.
+LSTM의 업데이트 과정은 다음과 같다:
 
-<br>
+- **망각 게이트(Forget Gate):**
+  \[
+  f_t = \sigma(W_f \cdot [h_{t-1}, x_t] + b_f)
+  \]
+  망각 게이트는 셀 상태에서 어떤 정보를 버릴지 결정
+
+- **입력 게이트(Input Gate):**
+  \[
+  i_t = \sigma(W_i \cdot [h_{t-1}, x_t] + b_i)
+  \]
+  \[
+  \tilde{C}_t = \tanh(W_C \cdot [h_{t-1}, x_t] + b_C)
+  \]
+  입력 게이트는 현재 입력에서 어떤 정보를 셀 상태에 추가할지 결정
+
+- **셀 상태 업데이트(Cell State Update):**
+  \[
+  C_t = f_t * C_{t-1} + i_t * \tilde{C}_t
+  \]
+  셀 상태는 망각 게이트로 조절된 이전 셀 상태와 입력 게이트로 조절된 새로운 후보 값을 결합하여 업데이트
+
+- **출력 게이트(Output Gate):**
+  \[
+  o_t = \sigma(W_o \cdot [h_{t-1}, x_t] + b_o)
+  \]
+  \[
+  h_t = o_t * \tanh(C_t)
+  \]
+  출력 게이트는 셀 상태에 tanh 활성화를 적용하고, 이를 출력 게이트로 조절하여 은닉 상태를 결정
+
+마지막으로, 시점 \( T \)에서의 예측값은 다음과 같이 계산된다:
+\[
+y_T = h_T * W_{xh}
+\]
+
+이와 같은 구조를 통해 LSTM은 긴 시퀀스에서도 중요한 정보를 효과적으로 유지하고 불필요한 정보를 제거할 수 있으며, 이는 시퀀스 데이터를 다루는 작업에 매우 적합하다.
 
 
 ## IV. Evaluation & Analysis
