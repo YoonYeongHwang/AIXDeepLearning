@@ -23,11 +23,11 @@
 ## II. Datasets
 ### Datasets
 * 데이터셋 링크
-    ```
-    서울교통공사 역별 일별 시간대별 승하차인원 정보 : http://data.seoul.go.kr/dataList/OA-12921/F/1/datasetView.do
-    서울교통공사 환승역 환승인원정보 : http://data.seoul.go.kr/dataList/OA-12033/S/1/datasetView.do
-    서울교통공사 지하철혼잡도정보 : http://data.seoul.go.kr/dataList/OA-12928/F/1/datasetView.do
-    ```
+```
+서울교통공사 역별 일별 시간대별 승하차인원 정보 : http://data.seoul.go.kr/dataList/OA-12921/F/1/datasetView.do
+서울교통공사 환승역 환승인원정보 : http://data.seoul.go.kr/dataList/OA-12033/S/1/datasetView.do
+서울교통공사 지하철혼잡도정보 : http://data.seoul.go.kr/dataList/OA-12928/F/1/datasetView.do
+```
 
 ### Dataset 전처리
 1. 필요한 라이브러리 가져오기
@@ -299,7 +299,7 @@ congestion3.to_csv('congestion3.csv', index=False, encoding='cp949')
 <br>
 
 ### 데이터 시각화
-1. 각 요일의의(평일, 토요일, 일요일) 시간대별 승차 인원 및 상/하선 혼잡도
+1. 각 요일의(평일, 토요일, 일요일) 시간대별 승차 인원 및 상/하선 혼잡도
 * 평일 시간대별 승차 인원 및 상/하선 혼잡도(예: 청량리역)
 ```python
 import matplotlib.pyplot as plt
