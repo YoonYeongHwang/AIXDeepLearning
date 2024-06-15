@@ -961,6 +961,36 @@ for epoch in range(num_epochs):
     val_loss /= len(val_loader)
     print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}, Val Loss: {val_loss:.4f}')
 ```
+Epoch [1/70], Loss: 0.0024, Val Loss: 0.0025
+Epoch [2/70], Loss: 0.0106, Val Loss: 0.0023
+Epoch [3/70], Loss: 0.0009, Val Loss: 0.0023
+Epoch [4/70], Loss: 0.0021, Val Loss: 0.0020
+Epoch [5/70], Loss: 0.0026, Val Loss: 0.0020
+Epoch [6/70], Loss: 0.0017, Val Loss: 0.0019
+Epoch [7/70], Loss: 0.0021, Val Loss: 0.0025
+Epoch [8/70], Loss: 0.0026, Val Loss: 0.0021
+Epoch [9/70], Loss: 0.0021, Val Loss: 0.0022
+Epoch [10/70], Loss: 0.0014, Val Loss: 0.0019
+Epoch [11/70], Loss: 0.0011, Val Loss: 0.0020
+Epoch [12/70], Loss: 0.0016, Val Loss: 0.0017
+Epoch [13/70], Loss: 0.0012, Val Loss: 0.0018
+Epoch [14/70], Loss: 0.0027, Val Loss: 0.0022
+Epoch [15/70], Loss: 0.0023, Val Loss: 0.0017
+<중략>
+Epoch [60/70], Loss: 0.0005, Val Loss: 0.0008
+Epoch [61/70], Loss: 0.0006, Val Loss: 0.0008
+Epoch [62/70], Loss: 0.0004, Val Loss: 0.0009
+Epoch [63/70], Loss: 0.0004, Val Loss: 0.0008
+Epoch [64/70], Loss: 0.0004, Val Loss: 0.0008
+Epoch [65/70], Loss: 0.0002, Val Loss: 0.0008
+Epoch [66/70], Loss: 0.0004, Val Loss: 0.0008
+Epoch [67/70], Loss: 0.0004, Val Loss: 0.0008
+Epoch [68/70], Loss: 0.0004, Val Loss: 0.0008
+Epoch [69/70], Loss: 0.0008, Val Loss: 0.0008
+Epoch [70/70], Loss: 0.0005, Val Loss: 0.0008
+
+* 결과값을 보면, 학습 과정에서 모델이 안정적으로 개선되고 있으며 최종 epoch에서 Loss: 0.0005, Val Loss: 0.0008로 검증데이터에서도 손실값이 낮게 나왔다. 이는 모델이 과적합되지 않고 일반화 성능도 높게 나타난다고 볼 수 있다.
+
 <br>
 
 6. 모델 사용하여 예측 수행하기
@@ -1014,6 +1044,13 @@ actual = actual[time_steps:]
 print("Predicted values:", predicted)  # Remove the extra dimension for readability
 print("Actual values:", actual)
 ```
+Predicted values: [0.49223268, 0.55302805, 0.59948254, 0.6101891, 0.68271565, 0.50707304, 0.47681022, 0.44612676, 0.42431593, 0.33253032, 0.33147523, 0.3468335, 0.30739588, 0.37064248, 0.3793793, 0.36240828, 0.75844723, 0.6545705]
+Actual values: [0.46213808 0.51670379 0.53619154 0.58296214 0.58685969 0.45712695
+ 0.39587973 0.33853007 0.30289532 0.21046771 0.19988864 0.20824053
+ 0.20211581 0.22884187 0.2188196  0.22104677 0.3435412 ]
+ 
+* 예측 값과 실제 값 사이에 어느 정도 오차가 존재함을 확인할 수 있었다. 아래에서 시각화를 통해 예측값과 실제 값을 비교해보자.
+
 <br>
 
 7. 실제 값과 예측 값 비교 시각화 
