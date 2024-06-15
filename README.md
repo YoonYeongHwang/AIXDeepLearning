@@ -651,39 +651,26 @@ LSTM 네트워크는 셀 상태와 은닉 상태를 통해 다음과 같은 방�
 LSTM의 업데이트 과정은 다음과 같다:
 
 - **망각 게이트(Forget Gate):**
-  \[
-  f_t = \sigma(W_f \cdot [h_{t-1}, x_t] + b_f)
-  \]
+  \[f_t = \sigma(W_f \cdot [h_{t-1}, x_t] + b_f)\]
   망각 게이트는 셀 상태에서 어떤 정보를 버릴지 결정
 
 - **입력 게이트(Input Gate):**
-  \[
-  i_t = \sigma(W_i \cdot [h_{t-1}, x_t] + b_i)
-  \]
-  \[
-  \tilde{C}_t = \tanh(W_C \cdot [h_{t-1}, x_t] + b_C)
-  \]
+  \[i_t = \sigma(W_i \cdot [h_{t-1}, x_t] + b_i)\]
+  \[\tilde{C}_t = \tanh(W_C \cdot [h_{t-1}, x_t] + b_C)\]
   입력 게이트는 현재 입력에서 어떤 정보를 셀 상태에 추가할지 결정
 
 - **셀 상태 업데이트(Cell State Update):**
-  \[
-  C_t = f_t * C_{t-1} + i_t * \tilde{C}_t
-  \]
+  \[ C_t = f_t * C_{t-1} + i_t * \tilde{C}_t\]
+  
   셀 상태는 망각 게이트로 조절된 이전 셀 상태와 입력 게이트로 조절된 새로운 후보 값을 결합하여 업데이트
 
 - **출력 게이트(Output Gate):**
-  \[
-  o_t = \sigma(W_o \cdot [h_{t-1}, x_t] + b_o)
-  \]
-  \[
-  h_t = o_t * \tanh(C_t)
-  \]
+  \[o_t = \sigma(W_o \cdot [h_{t-1}, x_t] + b_o)\]
+  \[h_t = o_t * \tanh(C_t)\]
   출력 게이트는 셀 상태에 tanh 활성화를 적용하고, 이를 출력 게이트로 조절하여 은닉 상태를 결정
 
 마지막으로, 시점 \( T \)에서의 예측값은 다음과 같이 계산된다:
-\[
-y_T = h_T * W_{xh}
-\]
+\[y_T = h_T * W_{xh}\]
 
 이와 같은 구조를 통해 LSTM은 긴 시퀀스에서도 중요한 정보를 효과적으로 유지하고 불필요한 정보를 제거할 수 있으며, 이는 시퀀스 데이터를 다루는 작업에 매우 적합하다.
 
