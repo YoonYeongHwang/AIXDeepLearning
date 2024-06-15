@@ -675,7 +675,10 @@ df.drop(stations_to_remove, inplace=True)
 <br>
 
 3. MinMaxScaler 이용하여 데이터 스케일링하기
-* MinMaxScaler import 및 각각의 스케일러 초기화하기
+* MinMaxScaler import 및 각각의 스케일러 만들기
+  - 데이터 예측 시 특정 feature에 과도하게 영향을 받지 않기 위해 정규화 작업 실행
+  - 각 target feature에 대해 MinMaxScaler 만들어 최솟값 0, 최댓값 1로 설정
+  - 예측 이후 다시 기존 값으로 변환하기 용이하게 각각 scaler를 만들었음
 ```python
 from sklearn.preprocessing import MinMaxScaler
 
