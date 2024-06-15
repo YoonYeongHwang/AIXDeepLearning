@@ -146,28 +146,9 @@ for idx, row in Chungmuro.iterrows():
   for col in columns:
     pivot_df.at[idx, col] = row[col] * rate_4
 ```
-* 연신내역의 6호선 승하차량이 모두 3호선의 데이터로 집계되어있어, 3,6호선 각각의 승하차량 비율에 따라 나눈다.
-```python
-rate_3 = 1115385 / 1708420
-rate_6 = 593035 / 1708420
-Yeonsinnae = pivot_df.loc[(pivot_df['역명'] == '연신내') & (pivot_df['호선'] == 3)]
-  
-for idx, row in Yeonsinnae.iterrows():
-  for col in columns:
-    pivot_df.at[idx + 2360, col] = row[col] * rate_6
-  for col in columns:
-    pivot_df.at[idx, col] = row[col] * rate_3
-```
-
-* 창동역의 1호선(경원선) 승하차량이 모두 4호선의 데이터로 집계되어있어, 1,4호선 각각의 승하차량 비율에 따라 나눈다.
-```python
-rate_4 = 1304648 / 3395546
-Chang_dong = pivot_df.loc[(pivot_df['역명'] == '창동') & (pivot_df['호선'] == 4)]
-
-for idx, row in Chang_dong.iterrows():
-    for col in columns:
-        pivot_df.at[idx, col] = row[col] * rate_4
-```
+* 이와 마찬가지의 방법으로
+  - 연신내역의 6호선 승하차량이 모두 3호선의 데이터로 집계되어있어, 3,6호선 각각의 승하차량 비율에 따라 나눈다.
+  - 창동역의 1호선(경원선) 승하차량이 모두 4호선의 데이터로 집계되어있어, 1,4호선 각각의 승하차량 비율에 따라 나눈다.
 <br>
 
 7. 데이터 병합 및 일부 환승역 승하차량 보정
@@ -645,8 +626,30 @@ plt.show()
 <br>
 
 ## III. Methodology
-### LSTM
+### Long Short Term Memory (LSTM)
+LSTM(Long Short Term Memory) 모델은 기존 RNN(Recurrent Neural Network)의 기울기 소실 문제를 해결하기 위해 개발되었다. LSTM은 RNN의 기본 구조에 셀 상태(Cell state)와 세 가지 게이트를 추가한 구조를 가지고 있다. 이 세 가지 게이트는 Forget Gate, Input Gate, Output Gate로 구성된다.
+![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/71d3a251-7669-48f5-ba0c-1620009e5c1b)
+![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/214e0a58-2108-4ea6-989b-59a44e16f966)
+
 <br>
+
+세 가지 게이트는 다음과 같은 역할을 합니다:
+
+<br>
+
+Forget Gate (망각 게이트): 과거의 불필요한 정보를 잊도록 결정합니다.
+Input Gate (입력 게이트): 현재의 정보를 기억하도록 결정합니다.
+Output Gate (출력 게이트): 어떤 정보를 출력할지 결정합니다.
+
+<br>
+
+LSTM 네트워크는 셀 상태와 은닉 상태를 통해 다음과 같은 방식으로 정보를 업데이트합니다:
+
+셀 상태(Cell State): 긴 시간 동안 정보를 유지하는 역할을 하며, 많은 시점에 걸쳐 정보를 전달합니다.
+은닉 상태(Hidden State): 단기적인 정보를 제공하며, 현재 입력과 셀 상태를 기반으로 매 시점마다 업데이트됩니다.
+
+<br>
+
 
 ## IV. Evaluation & Analysis
 1. 필요한 라이브러리 가져오기 및 GPU/CPU 디바이스 설정
@@ -749,79 +752,8 @@ for line in range(2,9):
         pd.DataFrame(tmp3).to_csv(f'weekday_split\\{line}_{period}_down.csv', index=False, encoding='cp949')
 ```
 
-* 데이터프레임에 'progression'열 생성 및 각 리스트 정의하기(토요일)
-```python
-saturday_up = ['역번호', '승차_Saturday', '하차_Saturday', '환승_Saturday', 'interval_Saturday', 'capacity', 'progression', '상선_Saturday']
-saturday_down = ['역번호', '승차_Saturday', '하차_Saturday', '환승_Saturday', 'interval_Saturday', 'capacity', 'progression', '하선_Saturday']
-saturday_up2 = ['승차_Saturday', '하차_Saturday', '환승_Saturday', 'interval_Saturday', 'capacity', 'progression', '상선_Saturday']
-saturday_down2 = ['승차_Saturday', '하차_Saturday', '환승_Saturday', 'interval_Saturday', 'capacity', 'progression', '하선_Saturday']
-```
+* 토요일, 일요일의 데이터도 위의 코드와 마찬가지로 처리한다.
 
-* 각 노선의 토요일 상/하행 데이터를 시간대별로 분리하여 정리한 후, 해당 데이터를 csv파일로 저장한다.
-* 2호선의 경우 progression 값을 0.5로 설정하고 이외의 노선은 역번호와 시작 번호를 기반으로 progression 값을 계산한다.
-```python
-for line in range(2,9):
-    for period in hours:
-        tmp = df.loc[df['호선'] == line]
-        tmp = tmp[saturday_up]
-        tmp2 = tmp.loc[df['hour'] == period]
-        tmp2 = tmp2.sort_values(by='역번호', axis=0, ascending=True, inplace=False)
-        if (line == 2):
-            tmp2['progression'] = [0.5] * len(tmp2)
-        else:
-            tmp2['progression'] = (num_stations[line] - (tmp2['역번호'] - line * 100 - start[line])) / num_stations[line]
-        tmp3 = tmp2[saturday_up2]
-        pd.DataFrame(tmp3).to_csv(f'saturday_split\\{line}_{period}_up.csv', index=False, encoding='cp949')
-
-    for period in hours:
-        tmp = df.loc[df['호선'] == line]
-        tmp = tmp[saturday_down]
-        tmp2 = tmp.loc[df['hour'] == period]
-        tmp2 = tmp2.sort_values(by='역번호', axis=0, ascending=False, inplace=False)
-        if (line == 2):
-            tmp2['progression'] = [0.5] * len(tmp2)
-        else:
-            tmp2['progression'] = (num_stations[line] - (tmp2['역번호'] - line * 100 - start[line])) / num_stations[line]
-        tmp3 = tmp2[saturday_down2]
-        pd.DataFrame(tmp3).to_csv(f'saturday_split\\{line}_{period}_down.csv', index=False, encoding='cp949')
-```
-
-* 데이터프레임에 'progression'열 생성 및 각 리스트 정의하기(일요일)
-```python
-sunday_up = ['역번호', '승차_Sunday', '하차_Sunday', '환승_Sunday', 'interval_Sunday', 'capacity', 'progression', '상선_Sunday']
-sunday_down = ['역번호', '승차_Sunday', '하차_Sunday', '환승_Sunday', 'interval_Sunday', 'capacity', 'progression', '하선_Sunday']
-sunday_up2 = ['승차_Sunday', '하차_Sunday', '환승_Sunday', 'interval_Sunday', 'capacity', 'progression', '상선_Sunday']
-sunday_down2 = ['승차_Sunday', '하차_Sunday', '환승_Sunday', 'interval_Sunday', 'capacity', 'progression', '하선_Sunday']
-```
-
-* 각 노선의 일요일 상/하행 데이터를 시간대별로 분리하여 정리한 후, 해당 데이터를 csv파일로 저장한다.
-* 2호선의 경우 progression 값을 0.5로 설정하고 이외의 노선은 역번호와 시작 번호를 기반으로 progression 값을 계산한다.
-```python
-for line in range(2, 9):
-    for period in hours:
-        tmp = df.loc[df['호선'] == line]
-        tmp = tmp[sunday_up]
-        tmp2 = tmp.loc[df['hour'] == period]
-        tmp2 = tmp2.sort_values(by='역번호', axis=0, ascending=True, inplace=False)
-        if (line == 2):
-            tmp2['progression'] = [0.5] * len(tmp2)
-        else:
-            tmp2['progression'] = (num_stations[line] - (tmp2['역번호'] - line * 100 - start[line])) / num_stations[line]
-        tmp3 = tmp2[sunday_up2]
-        pd.DataFrame(tmp3).to_csv(f'sunday_split\\{line}_{period}_up.csv', index=False, encoding='cp949')
-
-    for period in hours:
-        tmp = df.loc[df['호선'] == line]
-        tmp = tmp[sunday_down]
-        tmp2 = tmp.loc[df['hour'] == period]
-        tmp2 = tmp2.sort_values(by='역번호', axis=0, ascending=False, inplace=False)
-        if (line == 2):
-            tmp2['progression'] = [0.5] * len(tmp2)
-        else:
-            tmp2['progression'] = (num_stations[line] - (tmp2['역번호'] - line * 100 - start[line])) / num_stations[line]
-        tmp3 = tmp2[sunday_down2]
-        pd.DataFrame(tmp3).to_csv(f'sunday_split\\{line}_{period}_down.csv', index=False, encoding='cp949')
-```
 <br>
 
 3. 모델 학습에 사용할 수 있도록 데이터셋 준비하기
