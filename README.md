@@ -122,6 +122,7 @@ pivot_df = pivot_df.sort_values(by=['역번호', 'hour']).reset_index(drop=True)
 pivot_df.columns = pivot_df.columns.map('_'.join)
 pivot_df.columns = [col.rstrip('_') for col in pivot_df.columns]
 ```
+<br>
 
 6. 특정 역의 승하차량 보정
 * 충무로역의 3호선 승하차량이 모두 4호선의 데이터로 집계되어있어, 3,4호선 각각의 승하차량 비율에 따라 나눈다.
@@ -160,6 +161,7 @@ for idx, row in Chang_dong.iterrows():
     for col in columns:
         pivot_df.at[idx, col] = row[col] * rate_4
 ```
+<br>
 
 7. 데이터 병합 및 일부 환승역 승하차량 보정
 * 'station_number.csv' 파일을 읽어와 'pivot_df'와 'station_number' 데이터를 병합한다.
@@ -185,6 +187,7 @@ station_transfer.head
 station_transfer.columns
 station_transfer.dtypes
 ```
+<br>
 
 8. 환승 인원 스케일링
 * 역별 승하차 인원 데이터를 이용해 환승 인원 데이터를 비율에 맞춰 스케일링하고, 최종 결과를 csv 파일로 저장한다.
@@ -213,6 +216,7 @@ for station_name in transfer['역명']:
   
 new.to_csv('join2.csv', index=False, encoding='cp949')
 ```
+<br>
 
 9. 2022년도 혼잡도 데이터 불러오기 및 처리
 ```python
@@ -221,6 +225,8 @@ congestion = pd.read_csv("서울교통공사_지하철혼잡도정보_20221231.c
 
 congestion.head
 ```
+<br>
+
 10. 상행선/하행선 구분명 정리 및 역명 통일
 ```python
 stations_to_remove = ['진접', '오남', '별내별가람', '신내']
@@ -232,6 +238,7 @@ congestion["출발역"] = congestion["출발역"].replace("신촌(지하)", "신
 congestion["출발역"] = congestion["출발역"].replace("신천", "잠실새내")
 congestion["출발역"] = congestion["출발역"].replace("올림픽공원(한국체대)", "올림픽공원")
 ```
+<br>
 
 11. 시간대별 혼잡도 데이터 정리
 * 시간대별 혼잡도 데이터를 'hours' 배열에 맞춰 새롭게 정리하고 저장한다.
@@ -249,6 +256,7 @@ for idx, row in congestion.iterrows():
     congestion1.at[idx, hours[i]] = (row[time[2*i-1]] + row[time[2*i]]) / 2
 congestion1.to_csv('congestion1.csv', index=False, encoding='cp949')
 ```
+<br>
 
 12. 혼잡도 데이터 재구성하여 저장하기
 * 'congestion1' 데이터프레임에서 요일, 호선, 역번호, 출발역, 상하구분을 기준으로 '시간대'와 '이용객수' 열을 재구성하여 새로운 데이터프레임 'congestion2'를 생성한다.
@@ -278,6 +286,7 @@ congestion3 = pd.merge(congestion3, station_number, how='inner', on=['호선','�
 
 congestion3.to_csv('congestion3.csv', index=False, encoding='cp949')
 ```
+<br>
 
 13. 최종 데이터셋 준비하기
 * 데이터프레임을 '호선', '역명', 'hour', '역번호' 열을 기준으로 조인한 후, 필요한 열을 선택하여 최종 데이터셋을 만들고, 이를 '2022_final.csv'라는 파일로 저장한다.
@@ -287,6 +296,7 @@ congestion3.to_csv('congestion3.csv', index=False, encoding='cp949')
   final = final[col]
   final.to_csv('2022_final.csv', index=False, encoding='cp949')
 ```
+<br>
 
 ### 데이터 시각화
 1. 각 요일의의(평일, 토요일, 일요일) 시간대별 승차 인원 및 상/하선 혼잡도
@@ -466,6 +476,8 @@ plt.show()
 ```
 ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/dd36efac-1e0c-4af7-b2bb-2466211c1098)
 
+<br>
+
 2. 각 요일의(평일, 토요일, 일요일) 시간대별 배차간격 및 혼잡도
 * 평일 시간대별 배차간격 및 혼잡도(예: 청량리역)
 ```python
@@ -578,7 +590,9 @@ plt.show()
 ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/98ba921d-1bfd-41a6-bb96-041c252e0751)
 ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/06516f00-0801-4513-9881-d9d8b948475b)
 
-* 특정 호선 특정 시간대 역별 승하차 인원 및 혼잡도(예: 1호선, 07-08시간대)
+<br>
+
+3. 특정 호선 특정 시간대 역별 승하차 인원 및 혼잡도(예: 1호선, 07-08시간대)
 ```python
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -641,6 +655,7 @@ print(device)
 #check gpu device (if using gpu)
 print(torch.cuda.get_device_name(0))
 ```
+<br>
 
 2. 역번호가 199보다 작거나 1000보다 큰 역의 데이터를 제거하여 데이터프레임 재구성
 ```python
@@ -648,6 +663,7 @@ df = pd.read_csv("2022_final.csv", encoding='cp949')
 stations_to_remove = df[(df['역번호'] > 1000) | (df['역번호'] < 199)].index
 df.drop(stations_to_remove, inplace=True)
 ```
+<br>
 
 3. MinMaxScaler 이용하여 데이터 스케일링하기
 * MinMaxScaler import 및 각각의 스케일러 초기화하기
@@ -677,6 +693,7 @@ df['하선_Sunday'] = down_sunday_scaler.fit_transform(df['하선_Sunday'].to_fr
 
 df.to_csv('2022_scaled.csv', index=False, encoding='cp949')
 ```
+
 * 데이터프레임에 'progression'열 생성 및 각 리스트 정의하기(평일)
 ```python
 df['progression'] = [0.0] * len(df)
@@ -793,8 +810,12 @@ for line in range(2, 9):
         tmp3 = tmp2[sunday_down2]
         pd.DataFrame(tmp3).to_csv(f'sunday_split\\{line}_{period}_down.csv', index=False, encoding='cp949')
 ```
+<br>
 
+3. 모델 학습에 사용할 수 있도록 데이터셋 준비하기
 
+* 데이터를 저장할 리스트를 생성하고 시계열 길이를 8로 설정하기.
+* 각 디렉토리 내의 csv파일을 읽고, 데이터를 PyTorch 텐서로 변환하기
 ```python
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
@@ -819,7 +840,12 @@ for directory in directories:
             tmp = tmp.astype(float)
             tens = torch.from_numpy(tmp.values)
             time_series_list.append(tens)
+```
 
+* 각 시계열 데이터를 슬라이딩 윈도우 방식으로 나눠 입력 시퀀스 'x'와 타겟 값 'y' 생성하기
+* 타겟 값 'y'를 배열 형식으로 변환하고, 'x'와 'y'를 PyTorch 텐서로 변환하고 데이터 형식을 'float32'로 설정하기
+* 데이터 형태 확인
+```python
 for ts in time_series_list:
     for i in range(len(ts) - time_steps):
         X.append(ts[i:i + time_steps])
@@ -834,6 +860,10 @@ print(X.size())
 print(y.size())
 ```
 
+* 'Dataset' class를 상속하여 'TimeSeriesDataset' 클래스 정의하기
+* 'x'와 'y' 데이털르 사용하여 'TimeSeriesDataset' 인스턴스 생성
+* 전체 데이터셋을 학습용 데이터셋(80%)과 검증용 데이터셋(20%)으로 분할하기
+* 학습용, 검증용 데이터셋을 위한 데이터 로더 생성
 ```python
 class TimeSeriesDataset(Dataset):
     def __init__(self, X, y):
@@ -857,7 +887,12 @@ train_dataset, val_dataset = torch.utils.data.random_split(dataset, [train_size,
 train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
 val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False)
 ```
+<br>
 
+4. LSTM 모델 정의하고, cost function과 최적화 알고리즘 설정하기
+* 'nn.Module' 상속하여 'LSTMModel' 클래스 정의하기
+* cost function으로는 Mean-Squared-Error 사용
+* 최적화 알고리즘으로 Adam optimizer 사용하며, learning rate는 0.001로 설정
 ```python
 import torch.nn as nn
 import torch.optim as optim
@@ -885,7 +920,11 @@ model = LSTMModel(input_size, hidden_size, num_layers, output_size).to(device)
 criterion = nn.MSELoss()
 optimizer = optim.Adam(model.parameters(), lr=0.001)
 ```
+<br>
 
+5. 데이터 학습 및 검증 절차 수행하기
+* 학습 epoch 수는 70으로 설정
+* 각 epoch마다 학습과 검증을 반복함
 ```python
 # Training loop
 num_epochs = 70
@@ -913,6 +952,10 @@ for epoch in range(num_epochs):
     val_loss /= len(val_loader)
     print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}, Val Loss: {val_loss:.4f}')
 ```
+<br>
+
+6. 모델 사용하여 예측 수행하기
+* test를 위해 새로운 시계열 데이터를 사용하여 LSTM 모델로 예측을 수행하고, 예측된 값과 실제 값 출력하기
 
 ```python
 scaled_new_ts = pd.read_csv("4_20-21시간대_up.csv", encoding='cp949')
@@ -962,7 +1005,9 @@ actual = actual[time_steps:]
 print("Predicted values:", predicted)  # Remove the extra dimension for readability
 print("Actual values:", actual)
 ```
+<br>
 
+7. 실제 값과 예측 값 비교 시각화 
 ```python
 import matplotlib.pyplot as plt
 
