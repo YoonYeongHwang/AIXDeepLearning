@@ -46,9 +46,9 @@ station = pd.read_csv("서울교통공사_역별 일별 시간대별 승하차�
 station.head
 ```
 * 데이터 타입을 확인한다.
-    ``` python
-    print(station.dtypes)
-    ```
+``` python
+print(station.dtypes)
+```
 <br>
 
 3. 역명 정리하기
