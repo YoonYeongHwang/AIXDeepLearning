@@ -332,16 +332,8 @@ congestion3.to_csv('congestion3.csv', index=False, encoding='cp949')
   - 반대로 퇴근 시간대인 18-19 시간대, 19-20 시간대에는 반대의 이유로 상선의 혼잡도가 높게 나타났다. 
 
 * 주말 시간대별 배차간격 및 혼잡도(예: 1호선, 청량리역)
-  <br>
 
-  <토요일>
-  ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/6eb678fb-8f30-46ef-86aa-b4f73ceb3090)
-  ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/2b242431-064f-4aba-aa4a-923143e9b087)
-  <br>
-
-  <일요일>
-  ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/98ba921d-1bfd-41a6-bb96-041c252e0751)
-  ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/06516f00-0801-4513-9881-d9d8b948475b) <br>
+  ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/b3259b1a-9f25-4835-a500-8d35abb07e6a) <br>
   
   - 주말에는 전동차 배차간격이 5분으로 일정했으며, 평일에 비해 혼잡도의 변화가 크지 않았다. 다만, 심야시간대인 22-23시간대, 23-24시간대, 24시 이후 시간대에 혼잡도가 급격히 감소하는 것을 알 수 있다.
  
