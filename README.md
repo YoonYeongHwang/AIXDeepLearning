@@ -307,15 +307,13 @@ congestion3.to_csv('congestion3.csv', index=False, encoding='cp949')
 
 * 주말 시간대별 승차 인원 및 상/하선 혼잡도(예: 1호선, 청량리역)
 
-  ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/2f0ed5a9-7492-4f83-b720-9b13da6e2fcf)
-  ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/0f56fa2b-ea77-4457-ac9f-38ecf806d99e) <br>
+  ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/f55ddd07-57e8-4532-9c5e-fe83e222ede3) <br>
   
   - 주말에는 오후 시간대에 승/하차 인원이 증가함에 따라 11시간대에 하선 혼잡도가 증가하며, 16시간대에 상선 혼잡도가 증가하는 것을 확인 할 수 있다.
 
 * 역별 승하차 인원, 역별 상/하선 혼잡도 (예: 1호선, 평일, 07-08 시간대)
 
-  ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/4d734217-9747-4a14-91f9-848302e9fb69)
-  ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/139684f1-f7d2-47c3-a96c-b2d1a7aa2cde) <br>
+  ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/fcd2fe7a-cb53-44b8-8efd-d1d0f6ab382d) <br>
 
   - 평일 혼잡도가 높은 시간대인 7-8시간대에 역별 승/하차 인원과 혼잡도를 비교하였다. 그래프를 통해 청량리역에서 승차한 뒤, 목적지인 서울역에서 내리는 사람이 많을 것으로 추정하였다. <br> 
   따라서 동묘앞역이나, 동대문역에서는 승하차 인원은 적지만 혼잡도가 높게 유지되는 것을 알 수 있고, 최종 도착지인 서울역에서 승/하차 인원이 높은 것에 비해 혼잡도가 감소하는 것을 확인할 수 있다. <br> 
@@ -326,7 +324,7 @@ congestion3.to_csv('congestion3.csv', index=False, encoding='cp949')
 2. 각 요일의(평일, 토요일, 일요일) 시간대별 배차간격 및 혼잡도
 * 평일 시간대별 배차간격 및 혼잡도(예: 1호선, 청량리역)
 
-  ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/8279e24b-6682-4512-92c2-0dbfc760ff00) <br>
+  ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/e344f1de-aa4a-4ed9-9a8c-2b4246914b81)  <br>
   
   - 평일 출퇴근 시간대인 7-8시간대, 8-9시간대, 18-19시간대, 19-20시간대에 배차간격이 짧으며, 자주 배차됨에도 불구하고 혼잡도가 높게 나타났다.
   - 출근 시간대인 7-8시간대, 8-9시간대에는 주거지역이 다수 분포하는 청량리역에서 업무지역이 다수 분포하는 서울역으로 가는 방향인 하선의 혼잡도가 높게 나타났다.
