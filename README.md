@@ -829,7 +829,7 @@ print(y.size())
 ```
 
 * 'Dataset' class를 상속하여 'TimeSeriesDataset' 클래스 정의하기
-* 'x'와 'y' 데이털르 사용하여 'TimeSeriesDataset' 인스턴스 생성
+* 'x'와 'y' 데이터를 사용하여 'TimeSeriesDataset' 인스턴스 생성
 * 전체 데이터셋을 학습용 데이터셋(80%)과 검증용 데이터셋(20%)으로 분할하기
 * 학습용, 검증용 데이터셋을 위한 데이터 로더 생성
 ```python
