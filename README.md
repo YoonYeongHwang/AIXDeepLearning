@@ -783,25 +783,25 @@ MSE는 값이 작을수록 예측이 정확하며, R-squared score는 0과 1 사
 <br>
 
 * 일요일 3_17~18 시간대(상선)
-![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/228aed37-9cbe-4209-b968-f520c9a60b64)
+  ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/228aed37-9cbe-4209-b968-f520c9a60b64)
 
-```
-MSE: 21.9564
-R^2 Score: 0.3985
-```
+  ```
+  MSE: 21.9564
+  R^2 Score: 0.3985
+  ```
 - MSE가 21.9564라는 것은 예측값과 실제값 사이의 오차가 평균적으로 크지 않다고 볼 수 있다.
 - R-squared score을 바탕으로 보면 이 모델은 데이터의 변동성의 약 39.85%를 설명한다. 이는 모델의 설명력이 조금 떨어짐을 나타낸다.
 <br>
 
 * 일요일 5_12~13 시간대(하선)
 
-![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/c9ae68fa-7f71-4c54-b640-cd7afd57d4bd)
+  ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/c9ae68fa-7f71-4c54-b640-cd7afd57d4bd)
 
-```
-MSE: 39.9610
-R^2 Score: 0.4485
-```
-- MSE가 39.9610라는 것은 앞서 예측한 데이터보다는 예측값과 실제값 아이의 오차가 커졌다고 볼 수 있다.
+  ```
+  MSE: 39.9610
+  R^2 Score: 0.4485
+  ```
+- MSE가 39.9610라는 것은 앞서 예측한 데이터보다는 예측값과 실제값 사이의 오차가 커졌다고 볼 수 있다.
 - R-squared score을 바탕으로 보면 이 모델은 데이터의 변동성의 약 48.85% 를 설명한다. 이를 바탕으로 모델의 설명력이 앞서 예측한 것보다 더 낫다는 것을 알 수 있다.
 
 <br>
