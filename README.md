@@ -367,33 +367,26 @@ LSTM 네트워크는 셀 상태와 은닉 상태를 통해 다음과 같은 방�
 
 LSTM의 업데이트 과정은 다음과 같다:
 
-- **망각 게이트(Forget Gate):**
+- **망각 게이트(Forget Gate):** 망각 게이트는 셀 상태에서 어떤 정보를 버릴지 결정
   ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/496e8b6c-95e3-40f4-b7bf-419dc1e9fafa)
 
 <br>
 
-  망각 게이트는 셀 상태에서 어떤 정보를 버릴지 결정
-
-- **입력 게이트(Input Gate):**
+- **입력 게이트(Input Gate):** 입력 게이트는 현재 입력에서 어떤 정보를 셀 상태에 추가할지 결정
   ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/85b512dd-97d8-44c0-b055-a5cf85437a43)
 
 <br>
 
-  입력 게이트는 현재 입력에서 어떤 정보를 셀 상태에 추가할지 결정
-
-- **셀 상태 업데이트(Cell State Update):**
+- **셀 상태 업데이트(Cell State Update):** 셀 상태는 망각 게이트로 조절된 이전 셀 상태와 입력 게이트로 조절된 새로운 후보 값을 결합하여 업데이트
   ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/4561cfa7-73c6-4cbb-b3bc-f83551f09031)
   
   <br>
 
-    셀 상태는 망각 게이트로 조절된 이전 셀 상태와 입력 게이트로 조절된 새로운 후보 값을 결합하여 업데이트
-
-- **출력 게이트(Output Gate):**
+- **출력 게이트(Output Gate):** 출력 게이트는 셀 상태에 tanh 활성화를 적용하고, 이를 출력 게이트로 조절하여 은닉 상태를 결정
   ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/21199fca-2808-4726-a2af-0ed6dd4d9b41)
 
 <br>
 
-  출력 게이트는 셀 상태에 tanh 활성화를 적용하고, 이를 출력 게이트로 조절하여 은닉 상태를 결정
 
 마지막으로, 시점 _T_ 에서의 예측값은 다음과 같이 계산된다:
 <br>
@@ -453,11 +446,11 @@ down_sunday_scaler = MinMaxScaler(feature_range=(0, 1))
 
 * 평일, 토요일, 일요일 상/하선 데이터들을 각각의 스케일러를 사용하여 스케일링하고 csv파일로 저장하기
 * List of Features :
-  - 승차_Weekday/Saturday/Sunday: 평일에 승차한 인원 수를 나타냅니다.
-  - 하차_Weekday/Saturday/Sunday: 평일에 하차한 인원 수를 나타냅니다.
-  - 환승_Weekday/Saturday/Sunday: 평일에 발생한 환승 수를 나타냅니다.
-  - interval_Weekday/Saturday/Sunday: 평일의 역간 시간 간격을 나타냅니다.
-  - capacity: 열차나 플랫폼의 수용 능력을 나타냅니다.
+  - 승차_Weekday/Saturday/Sunday: 각 요일(평일, 토요일, 일요일)에 승차한 인원
+  - 하차_Weekday/Saturday/Sunday: 각 요일에 하차한 인원
+  - 환승_Weekday/Saturday/Sunday: 각 요일에 발생한 환승 인원
+  - interval_Weekday/Saturday/Sunday: 각 요일별 배차 간격
+  - capacity: 열차나 플랫폼의 수용 능력
   - progression: 
   
 ```python
