@@ -775,10 +775,7 @@ plt.show()
 
 ## VI. Conclusion: Discussion
 test 데이터인 2021년도의 데이터 중 2개의 데이터를 가져와 MSE 값과 R-squared score를 확인해보았다.
-(hidden_size = 70  num_layers = 5 epochs = 50)
-
-<br>
-
+(hidden_size = 70  num_layers = 5 epochs = 50) <br>
 MSE는 값이 작을수록 예측이 정확하며, R-squared score는 0과 1 사이의 값을 가지는데, 1에 가까울수록 모델의 데이터 설명력이 좋은 것이다.
 <br>
 
