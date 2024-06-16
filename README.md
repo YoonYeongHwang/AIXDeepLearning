@@ -297,53 +297,56 @@ congestion3.to_csv('congestion3.csv', index=False, encoding='cp949')
 
 ### 데이터 시각화
 1. 각 요일의(평일, 토요일, 일요일) 시간대별 승차 인원 및 상/하선 혼잡도
-* 평일 시간대별 승차 인원 및 상/하선 혼잡도(예: 청량리역)
+* 평일 시간대별 승차 및 하차인원과 상선 및 하선 혼잡도 비교 (예 : 1호선, 청량리역)
 
-![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/0434f090-2952-4cef-b0af-7722dd987526)
-![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/920af747-bac8-4e4d-88fa-72424c69eb9a)
+  ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/24e5e20e-9a50-4b65-b80c-0a923fa67fd5) <br>
+  
+  - 출근 시간대인 7-8시간대에 승/하차 인원과 하선 혼잡도가 증가하는 것을 확인할 수 있다.
+  - 퇴근 시간대인 18-19시간대에 승/하차 인원과 상선 혼잡도가 증가하는 것을 확인할 수 있다.
 
-* 토요일 시간대별 승차 인원 및 상/하선 혼잡도(예: 청량리역)
 
-![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/e742c129-9ab1-4da5-8faa-4e06d8182a20)
-![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/48731efa-e45a-4a3b-a5d0-af57d5ba4b4c)
+* 주말 시간대별 승차 인원 및 상/하선 혼잡도(예: 1호선, 청량리역)
 
-* 일요일 시간대별 승차 인원 및 상/하선 혼잡도(예: 청량리역)
+  ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/2f0ed5a9-7492-4f83-b720-9b13da6e2fcf)
+  ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/0f56fa2b-ea77-4457-ac9f-38ecf806d99e) <br>
+  
+  - 주말에는 오후 시간대에 승/하차 인원이 증가함에 따라 11시간대에 하선 혼잡도가 증가하며, 16시간대에 상선 혼잡도가 증가하는 것을 확인 할 수 있다.
 
-![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/53109601-ac87-485c-9b04-fef127567807)
-![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/2267267a-98ff-4ddd-b2cc-30946bbac01f)
+* 역별 승하차 인원, 역별 상/하선 혼잡도 (예: 1호선, 평일, 07-08 시간대)
 
-* 역별 승하차 인원, 역별 상/하선 혼잡도 (예: 07-08 시간대)
+  ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/4d734217-9747-4a14-91f9-848302e9fb69)
+  ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/139684f1-f7d2-47c3-a96c-b2d1a7aa2cde) <br>
 
-![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/755503cc-4e5a-4eaf-b13d-d4fbe9bf65bf)
+  - 평일 혼잡도가 높은 시간대인 7-8시간대에 역별 승/하차 인원과 혼잡도를 비교하였다. 그래프를 통해 청량리역에서 승차한 뒤, 목적지인 서울역에서 내리는 사람이 많을 것으로 추정하였다. <br> 
+  따라서 동묘앞역이나, 동대문역에서는 승하차 인원은 적지만 혼잡도가 높게 유지되는 것을 알 수 있고, 최종 도착지인 서울역에서 승/하차 인원이 높은 것에 비해 혼잡도가 감소하는 것을 확인할 수 있다. <br> 
+  즉, 승/하차 인원과 혼잡도는 직접적인 관계를 찾을 수 없지만, 이전 역에서 승/하차 인원이 많다면 내부 혼잡도가 증가한 채로 유지한다고 생각할 수 있다. <br>
+  따라서, 선형적인 회귀 방법보다는 LSTM을 이용하여 시간대별 데이터를 전체적으로 입력받아 혼잡도를 유추해 보았다.
 
-* 역별 승하차 인원과 역별 상/하선 혼잡도를 한눈에 비교할 수 있도록 한 그래프 안에 시각화 (예: 07-08 시간대)
- 
-![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/dd36efac-1e0c-4af7-b2bb-2466211c1098)
-
-<br>
 
 2. 각 요일의(평일, 토요일, 일요일) 시간대별 배차간격 및 혼잡도
-* 평일 시간대별 배차간격 및 혼잡도(예: 청량리역)
+* 평일 시간대별 배차간격 및 혼잡도(예: 1호선, 청량리역)
 
-![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/4f8e7f25-8e90-4c30-9fcb-b572d4401d7d)
-![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/2975fb1d-b11d-4e2f-b994-907ac10de4c5)
+  ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/4f8e7f25-8e90-4c30-9fcb-b572d4401d7d)
+  ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/2975fb1d-b11d-4e2f-b994-907ac10de4c5) <br>
+  
+  - 평일 출퇴근 시간대인 7-8시간대, 8-9시간대, 18-19시간대, 19-20시간대에 배차간격이 짧으며, 자주 배차됨에도 불구하고 혼잡도가 높게 나타났다.
+  - 출근 시간대인 7-8시간대, 8-9시간대에는 주거지역이 다수 분포하는 청량리역에서 업무지역이 다수 분포하는 서울역으로 가는 방향인 하선의 혼잡도가 높게 나타났다.
+  - 반대로 퇴근 시간대인 18-19 시간대, 19-20 시간대에는 반대의 이유로 상선의 혼잡도가 높게 나타났다. 
 
-* 토요일 시간대별 배차간격 및 혼잡도(예: 청량리역)
+* 주말 시간대별 배차간격 및 혼잡도(예: 1호선, 청량리역)
+  <br>
 
-![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/6eb678fb-8f30-46ef-86aa-b4f73ceb3090)
-![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/2b242431-064f-4aba-aa4a-923143e9b087)
+  <토요일>
+  ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/6eb678fb-8f30-46ef-86aa-b4f73ceb3090)
+  ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/2b242431-064f-4aba-aa4a-923143e9b087)
+  <br>
 
-* 일요일 시간대별 배차간격 및 혼잡도(예: 청량리역)
-
-![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/98ba921d-1bfd-41a6-bb96-041c252e0751)
-![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/06516f00-0801-4513-9881-d9d8b948475b)
-
-<br>
-
-3. 특정 호선 특정 시간대 역별 승하차 인원 및 혼잡도(예: 1호선, 07-08시간대)
-
-![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/cf8e9853-a04f-483b-a5ae-d5835353a62b)
-
+  <일요일>
+  ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/98ba921d-1bfd-41a6-bb96-041c252e0751)
+  ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/06516f00-0801-4513-9881-d9d8b948475b) <br>
+  
+  - 주말에는 전동차 배차간격이 5분으로 일정했으며, 평일에 비해 혼잡도의 변화가 크지 않았다. 다만, 심야시간대인 22-23시간대, 23-24시간대, 24시 이후 시간대에 혼잡도가 급격히 감소하는 것을 알 수 있다.
+ 
 <br>
 
 ## III. Methodology
@@ -750,7 +753,7 @@ Actual values: [0.46213808 0.51670379 0.53619154 0.58296214 0.58685969 0.4571269
  0.20211581 0.22884187 0.2188196  0.22104677 0.3435412 ]
 ```
 
-* 예측 값과 실제 값 사이에 어느 정도 오차가 존재함을 확인할 수 있었다.
+* 예측 값과 실제 값 사이에 약간의 오차가 존재함을 확인할 수 있었다.
 
 <br>
 
@@ -762,6 +765,9 @@ Actual values: [0.46213808 0.51670379 0.53619154 0.58296214 0.58685969 0.4571269
 <br>
 
 ## VI. Conclusion: Discussion
+
+### Conclusion
+
 test 데이터인 2021년도의 데이터 중 2개의 데이터를 가져와 MSE 값과 R-squared score를 확인해보았다. <br>
 (hidden_size = 70  num_layers = 5 epochs = 50) <br>
 MSE는 값이 작을수록 예측이 정확하며, R-squared score는 0과 1 사이의 값을 가지는데, 1에 가까울수록 모델의 데이터 설명력이 좋은 것이다.
@@ -788,6 +794,14 @@ MSE는 값이 작을수록 예측이 정확하며, R-squared score는 0과 1 사
   ```
   - MSE가 39.9610라는 것은 앞서 예측한 데이터보다는 예측값과 실제값 사이의 오차가 커졌다고 볼 수 있다.
   - R-squared score을 바탕으로 보면 이 모델은 데이터의 변동성의 약 44.85% 를 설명한다. 이를 바탕으로 모델의 설명력이 앞서 예측한 것보다 더 낫다는 것을 알 수 있다.
+
+<br>
+
+### Discussion
+
+지하철 데이터들이 환승역의 데이터가 한 쪽 노선으로 편중되어있다는 점, 기/종점에 가까운 역의 승차 인원은 한 쪽 방향으로 더 많이 몰려 있다는 점과 같이, 데이터를 다룰 때 실제와 예측을 비슷하게 하기 위해 전처리해야 하는 과정이 까다롭고 길었다. <br>
+LSTM 기반 예측 모델을 통한 학습이 매우 잘 되었고, 예측 결과도 실제값과 오차가 작은 편이라는 점이 긍정적이다. 하지만 모델의 설명력이 부족한 부분은 보완해야 할 것이다. <br>
+딥러닝 기술을 통해 지하철 혼잡도 예측 기술을 더욱 향상시키고 고도화한다면, 유동인구가 많은 수도권의 대중교통 이용자들의 안전과 교통관리 및 편의서비스를 제공할 수 있을 것으로 보인다.
 
 <br>
 
