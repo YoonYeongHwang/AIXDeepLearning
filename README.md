@@ -651,7 +651,8 @@ LSTM 네트워크는 셀 상태와 은닉 상태를 통해 다음과 같은 방�
 LSTM의 업데이트 과정은 다음과 같다:
 
 - **망각 게이트(Forget Gate):**
-  
+  ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/92e78ebd-d0ab-492a-858a-49de15640c10)
+
   망각 게이트는 셀 상태에서 어떤 정보를 버릴지 결정
 
 - **입력 게이트(Input Gate):**
@@ -660,13 +661,13 @@ LSTM의 업데이트 과정은 다음과 같다:
   입력 게이트는 현재 입력에서 어떤 정보를 셀 상태에 추가할지 결정
 
 - **셀 상태 업데이트(Cell State Update):**
-  \[ C_t = f_t * C_{t-1} + i_t * \tilde{C}_t\]
+  ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/706aa3ee-e772-4b5f-b083-81092f74e4f5)
   
   셀 상태는 망각 게이트로 조절된 이전 셀 상태와 입력 게이트로 조절된 새로운 후보 값을 결합하여 업데이트
 
 - **출력 게이트(Output Gate):**
-  \[o_t = \sigma(W_o \cdot [h_{t-1}, x_t] + b_o)\]
-  \[h_t = o_t * \tanh(C_t)\]
+ ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/434190f5-80c9-4e7c-b2f3-0773987ffb3e)
+
   출력 게이트는 셀 상태에 tanh 활성화를 적용하고, 이를 출력 게이트로 조절하여 은닉 상태를 결정
 
 마지막으로, 시점 \( T \)에서의 예측값은 다음과 같이 계산된다:
