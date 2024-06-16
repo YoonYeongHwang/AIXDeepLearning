@@ -326,8 +326,7 @@ congestion3.to_csv('congestion3.csv', index=False, encoding='cp949')
 2. 각 요일의(평일, 토요일, 일요일) 시간대별 배차간격 및 혼잡도
 * 평일 시간대별 배차간격 및 혼잡도(예: 1호선, 청량리역)
 
-  ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/4f8e7f25-8e90-4c30-9fcb-b572d4401d7d)
-  ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/2975fb1d-b11d-4e2f-b994-907ac10de4c5) <br>
+  ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/8279e24b-6682-4512-92c2-0dbfc760ff00) <br>
   
   - 평일 출퇴근 시간대인 7-8시간대, 8-9시간대, 18-19시간대, 19-20시간대에 배차간격이 짧으며, 자주 배차됨에도 불구하고 혼잡도가 높게 나타났다.
   - 출근 시간대인 7-8시간대, 8-9시간대에는 주거지역이 다수 분포하는 청량리역에서 업무지역이 다수 분포하는 서울역으로 가는 방향인 하선의 혼잡도가 높게 나타났다.
