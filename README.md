@@ -7,6 +7,7 @@
 5. [Evaluation & Analysis](#iv-evaluation--analysis)
 6. [Related Work](#v-related-work-eg-existing-studies)
 7. [Conclusion](#vi-conclusion-discussion)
+8. [Credits](#vii-credits)
 
 <br>
 
@@ -448,6 +449,14 @@ down_sunday_scaler = MinMaxScaler(feature_range=(0, 1))
 ```
 
 * 평일, 토요일, 일요일 상/하선 데이터들을 각각의 스케일러를 사용하여 스케일링하고 csv파일로 저장하기
+* List of Features :
+  - 승차_Weekday/Saturday/Sunday: 평일에 승차한 인원 수를 나타냅니다.
+  - 하차_Weekday/Saturday/Sunday: 평일에 하차한 인원 수를 나타냅니다.
+  - 환승_Weekday/Saturday/Sunday: 평일에 발생한 환승 수를 나타냅니다.
+  - interval_Weekday/Saturday/Sunday: 평일의 역간 시간 간격을 나타냅니다.
+  - capacity: 열차나 플랫폼의 수용 능력을 나타냅니다.
+  - progression: 
+  
 ```python
 features = ['승차_Weekday', '승차_Saturday', '승차_Sunday', '하차_Weekday', '하차_Saturday', '하차_Sunday', '환승_Weekday', '환승_Saturday', '환승_Sunday', 'interval_Weekday', 'interval_Saturday', 'interval_Sunday', 'capacity']
 
@@ -769,3 +778,9 @@ plt.show()
 <br>
 
 ## VI. Conclusion: Discussion
+
+## VII. Credits
+* 강민성 : data preprocessing, code implementation
+* 김승윤 : data visualization, methodology introduction
+* 오세원 : YouTube recording
+* 황윤영 : write up Github, make conclusion
