@@ -390,8 +390,11 @@ LSTM의 업데이트 과정은 다음과 같다:
 
   출력 게이트는 셀 상태에 tanh 활성화를 적용하고, 이를 출력 게이트로 조절하여 은닉 상태를 결정
 
-마지막으로, 시점 _T_에서의 예측값은 다음과 같이 계산된다:
-![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/6e63026d-1edd-4ce9-aacc-b630f99e667b)
+마지막으로, 시점 _T_ 에서의 예측값은 다음과 같이 계산된다:
+<br>
+
+![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/6e63026d-1edd-4ce9-aacc-b630f99e667b)<img width="80" height="10"></img>
+<br>
 
 
 이와 같은 구조를 통해 LSTM은 긴 시퀀스에서도 중요한 정보를 효과적으로 유지하고 불필요한 정보를 제거할 수 있으며, 이는 시퀀스 데이터를 다루는 작업에 매우 적합하다.
