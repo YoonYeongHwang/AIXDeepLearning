@@ -343,7 +343,8 @@ LSTM(Long Short Term Memory) 모델은 기존 RNN(Recurrent Neural Network)의 �
 
 <br>
 
-![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/71d3a251-7669-48f5-ba0c-1620009e5c1b)
+![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/47e8106c-67c0-4efe-ad88-63dad6de2380)
+
 ![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/214e0a58-2108-4ea6-989b-59a44e16f966)
 
 <br>
@@ -393,11 +394,12 @@ LSTM의 업데이트 과정은 다음과 같다:
 마지막으로, 시점 _T_ 에서의 예측값은 다음과 같이 계산된다:
 <br>
 
-![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/6e63026d-1edd-4ce9-aacc-b630f99e667b)<img width="80" height="10"></img>
+![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/6e63026d-1edd-4ce9-aacc-b630f99e667b)<img width="100"></img>
 <br>
 
 
 이와 같은 구조를 통해 LSTM은 긴 시퀀스에서도 중요한 정보를 효과적으로 유지하고 불필요한 정보를 제거할 수 있으며, 이는 시퀀스 데이터를 다루는 작업에 매우 적합하다.
+<br>
 우리는 지하철역이 순차적으로 존재하는 것을 시계열로 해석할 수 있다고 생각했기 때문에 예측 모델로 LSTM을 선정했다.
 
 ## IV. Evaluation & Analysis
