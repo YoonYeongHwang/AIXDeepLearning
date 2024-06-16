@@ -519,7 +519,7 @@ for line in range(2,9):
 
 <br>
 
-3. 모델 학습에 사용할 수 있도록 데이터셋 준비하기
+4. 모델 학습에 사용할 수 있도록 데이터셋 준비하기
 
 * 데이터를 저장할 리스트를 생성하고 시계열 길이를 8로 설정하기.
 * 각 디렉토리 내의 csv파일을 읽고, 데이터를 PyTorch 텐서로 변환하기
@@ -596,7 +596,7 @@ val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False)
 ```
 <br>
 
-4. LSTM 모델 정의하고, cost function과 최적화 알고리즘 설정하기
+5. LSTM 모델 정의하고, cost function과 최적화 알고리즘 설정하기
 * 'nn.Module' 상속하여 'LSTMModel' 클래스 정의하기
 * cost function으로는 Mean-Squared-Error 사용
 * 최적화 알고리즘으로 Adam optimizer 사용하며, learning rate는 0.001로 설정
@@ -629,7 +629,7 @@ optimizer = optim.Adam(model.parameters(), lr=0.001)
 ```
 <br>
 
-5. 데이터 학습 및 검증 절차 수행하기
+6. 데이터 학습 및 검증 절차 수행하기
 * 학습 epoch 수는 70으로 설정
 * 각 epoch마다 학습과 검증을 반복함
 ```python
@@ -692,7 +692,7 @@ Epoch [70/70], Loss: 0.0005, Val Loss: 0.0008
 
 <br>
 
-6. 모델 사용하여 예측 수행하기
+7. 모델 사용하여 예측 수행하기
 * test를 위해 새로운 시계열 데이터를 사용하여 LSTM 모델로 예측을 수행하고, 예측된 값과 실제 값 출력하기
 
 ```python
