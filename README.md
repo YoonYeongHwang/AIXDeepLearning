@@ -745,24 +745,7 @@ Actual values: [0.46213808 0.51670379 0.53619154 0.58296214 0.58685969 0.4571269
  0.20211581 0.22884187 0.2188196  0.22104677 0.3435412 ]
 ```
 
-* 예측 값과 실제 값 사이에 어느 정도 오차가 존재함을 확인할 수 있었다. 아래에서 시각화를 통해 예측값과 실제 값을 비교해보자.
-
-<br>
-
-7. 실제 값과 예측 값 비교 시각화 
-```python
-import matplotlib.pyplot as plt
-
-plt.figure(figsize=(12, 6))
-plt.plot(actual, label='Actual')
-plt.plot(predicted, label='Predicted')
-plt.title('Actual vs Predicted Values')
-plt.xlabel('Time Step')
-plt.ylabel('Value')
-plt.legend()
-plt.show()
-```
-![image](https://github.com/YoonYeongHwang/AIXDeepLearning/assets/170499968/844a0cd3-edaf-42b2-b959-f079b81ed73d)
+* 예측 값과 실제 값 사이에 어느 정도 오차가 존재함을 확인할 수 있었다.
 
 <br>
 
