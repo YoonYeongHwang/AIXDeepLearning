@@ -182,11 +182,35 @@ transfer.drop(columns='연번', inplace=True)
 transfer = transfer.rename(columns={'평일(일평균)': '환승_Weekday', '토요일': '환승_Saturday', '일요일': '환승_Sunday'})
 transfer.drop(transfer[transfer['역명'] == '신내'].index, inplace=True)
 
+transfer.head
+```
+<br>
+
+* 'station1'과 'transfer' 데이터프레임을 '역명'을 기준으로 결합하여 'station_transfer'데이터프레임을 생성한다.
+* 생성한 'station_transfer'와 배차간격을 나타내는 'interval'데이터프레임을 '호선'과 'hour' 컬럼을 기준으로 결합하여 'station_transfer' 데이터프레임을 수정한다.
+* 'hour' 컬럼값을 카테고리형으로 변환 후 정렬된 순서형 데이터로 만든다.
+* 'station_transfer'를 '역번호'와 'hour'컬럼을 기준으로 정렬하고 인덱스를 재설정하고 다시 'hour' 컬럼 값을 문자열로 변환
+* 'station_transfer'의 결측값 0으로 채우기
+
+```python
+interval = pd.read_csv("interval.csv", encoding='cp949')
+
+station_transfer = pd.merge(station1, transfer, how='outer', on='역명')
+station_transfer = pd.merge(station_transfer, interval, how='outer', on=['호선', 'hour'])
+
+station_transfer['hour'] = pd.Categorical(station_transfer['hour'], categories=hours, ordered=True)
+station_transfer = station_transfer.sort_values(by=['역번호', 'hour']).reset_index(drop=True)
+
+station_transfer['hour'] = station_transfer['hour'].astype(str)
+
+station_transfer = station_transfer.fillna(0)
+
+#station_transfer.to_csv('join.csv', index=False, encoding='cp949')
+
 station_transfer.head
 station_transfer.columns
 station_transfer.dtypes
 ```
-<br>
 
 8. 환승 인원 스케일링
 * 역별 승하차 인원 데이터를 이용해 환승 인원 데이터를 비율에 맞춰 스케일링하고, 최종 결과를 csv 파일로 저장한다.
